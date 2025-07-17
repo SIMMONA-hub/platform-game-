@@ -71,8 +71,33 @@
 
     <div id="scene5Screen" class="screen">
         <div class="bakhredin-scene-container">
-            <img src="assets/bakhredin.gif" alt="Bakhredin" class="bakhredin-character">
+            <img src="assets/Rasul.png" alt="Rasul" class="bakhredin-rasul-character" id="bakhredinRasul">
+            <img src="assets/Rasulwithlaptop.gif" alt="Rasul Attack" class="bakhredin-rasul-attack" id="bakhredinRasulAttack" style="display:none;">
+            <img src="assets/bakhredin.gif" alt="Bakhredin" class="bakhredin-character" id="bakhredinChar">
+            <img src="assets/bakhredin.gif" alt="Bakhredin Fall" class="bakhredin-fall" id="bakhredinFall" style="display:none;">
             <div class="bakhredin-dialog pixel-text" id="bakhredinDialog"></div>
+        </div>
+    </div>
+
+    <div id="scene6Screen" class="screen">
+        <div class="platformer-scene-container">
+            <canvas id="platformerCanvas" width="1200" height="600"></canvas>
+            <div class="controls-hint pixel-text" style="bottom:10px;">Стрелки — движение, SPACE — прыжок</div>
+        </div>
+    </div>
+
+    <div id="story7Screen" class="screen">
+        <div class="story-slide" id="story7slide1">
+            <div class="story-text pixel-text" id="story7Text1"></div>
+            <div class="continue-hint pixel-text">Click to continue...</div>
+        </div>
+        <div class="story-slide" id="story7slide2">
+            <div class="story-text pixel-text" id="story7Text2"></div>
+            <div class="continue-hint pixel-text">Click to continue...</div>
+        </div>
+        <div class="story-slide" id="story7slide3">
+            <div class="story-text pixel-text" id="story7Text3"></div>
+            <div class="continue-hint pixel-text">Click to start challenge!</div>
         </div>
     </div>
 

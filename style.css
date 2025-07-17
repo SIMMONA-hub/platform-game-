@@ -324,8 +324,8 @@ body {
     position: absolute;
     right: 5%;
     bottom: 2%;
-    width: 300px;
-    height: 420px;
+    width: 350px;
+    height: 490px;
     object-fit: contain;
     z-index: 10;
     image-rendering: pixelated;
@@ -356,4 +356,99 @@ body {
     z-index: 20;
     box-shadow: 0 0 16px #00ffcc44;
     letter-spacing: 1.5px;
+} 
+
+.bakhredin-rasul-character {
+    position: absolute;
+    left: 5%;
+    bottom: 2%;
+    width: 350px;
+    height: 490px;
+    object-fit: contain;
+    z-index: 10;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    filter: drop-shadow(0 0 16px #000a);
+    animation: rasul-in 1s cubic-bezier(.68,-0.55,.27,1.55);
+}
+
+@keyframes rasul-in {
+    0% { left: -400px; opacity: 0; }
+    100% { left: 5%; opacity: 1; }
+} 
+
+.bakhredin-rasul-attack {
+    position: absolute;
+    left: 5%;
+    bottom: 2%;
+    width: 350px;
+    height: 490px;
+    object-fit: contain;
+    z-index: 20;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    filter: drop-shadow(0 0 16px #000a);
+    pointer-events: none;
+} 
+
+.bakhredin-fall {
+    position: absolute;
+    right: 2%;
+    bottom: 2%;
+    width: 350px;
+    height: 490px;
+    object-fit: contain;
+    z-index: 15;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    transform: rotate(-90deg);
+    opacity: 1;
+    transition: opacity 1.2s linear;
+    pointer-events: none;
+    filter: drop-shadow(0 0 16px #000a);
+} 
+
+.bakhredin-exit-right {
+    animation: bakhredin-exit-right-anim 1.2s forwards;
+}
+
+@keyframes bakhredin-exit-right-anim {
+    0% {
+        right: 5%;
+        opacity: 1;
+    }
+    80% {
+        right: -30%;
+        opacity: 1;
+    }
+    100% {
+        right: -40%;
+        opacity: 0;
+    }
+} 
+
+.platformer-scene-container {
+    width: 100vw;
+    height: 100vh;
+    background-image: url('assets/image (3).gif');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #000;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#platformerCanvas {
+    background: transparent;
+    display: block;
+    margin: 0 auto;
+    border: 3px solid #00ffcc;
+    box-shadow: 0 0 24px #00ffcc44;
 } 

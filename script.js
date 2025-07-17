@@ -214,15 +214,60 @@ function startScenes() {
     }, 3000); // 3 seconds for image.gif
 }
 
+let bakhredinDialogLines = [
+    'Ты что уходишь рано? Других не знаю, но мои ментики остаются даже до 6!',
+    'Я всю ночь кодил, мне бы домой хоть немного поспать...',
+    'Настоящие стартаперы не спят! Ты хочешь успеха или нет?',
+    'Я хочу, чтобы мой проект работал, а не чтобы я выгорел!',
+    'Выгоришь — значит не твое! Мои ментики не сдаются!'
+];
+let bakhredinDialogIndex = 0;
+let bakhredinTyping = false;
+
+// Управление Расулом в сцене с Бахредином
+let bakhredinRasulPos = { x: 5, y: 2, velocityY: 0, isJumping: false };
+let bakhredinKeys = {};
+let bakhredinAttackActive = false;
+
 function startBakhredinScene() {
     showScreen('scene5');
-    const dialog = [
-        'Ты что уходишь рано? Других не знаю, но мои ментики остаются даже до 6!'
-    ];
-    typeDialogText(document.getElementById('bakhredinDialog'), dialog[0]);
+    bakhredinDialogIndex = 0;
+    showBakhredinDialogLine();
+    document.getElementById('scene5Screen').onclick = nextBakhredinDialog;
+    // Управление: инициализировать только если еще не было
+    if (!window._bakhredinSceneStarted) {
+        bakhredinRasulPos = { x: 5, y: 2, velocityY: 0, isJumping: false };
+        bakhredinAttackActive = false;
+        bakhredinKeys = {};
+        updateBakhredinRasulPosition();
+        window.addEventListener('keydown', bakhredinKeyDown);
+        window.addEventListener('keyup', bakhredinKeyUp);
+        animateBakhredinRasul();
+        window._bakhredinSceneStarted = true;
+    }
 }
 
-function typeDialogText(element, text, speed = 35) {
+function showBakhredinDialogLine() {
+    const dialogBox = document.getElementById('bakhredinDialog');
+    dialogBox.textContent = '';
+    bakhredinTyping = true;
+    typeDialogText(dialogBox, bakhredinDialogLines[bakhredinDialogIndex], 35, () => {
+        bakhredinTyping = false;
+    });
+}
+
+function nextBakhredinDialog() {
+    if (bakhredinTyping) return;
+    bakhredinDialogIndex++;
+    if (bakhredinDialogIndex < bakhredinDialogLines.length) {
+        showBakhredinDialogLine();
+    } else {
+        // Диалог окончен, можно добавить переход к следующей сцене или действию
+        // Например: showEndScreen();
+    }
+}
+
+function typeDialogText(element, text, speed = 35, onDone) {
     element.textContent = '';
     let i = 0;
     function typeChar() {
@@ -230,6 +275,8 @@ function typeDialogText(element, text, speed = 35) {
             element.textContent += text.charAt(i);
             i++;
             setTimeout(typeChar, speed);
+        } else if (onDone) {
+            onDone();
         }
     }
     typeChar();
@@ -301,4 +348,215 @@ function stopInteractiveScene() {
     isInteractiveScene = false;
 }
 
+function bakhredinKeyDown(e) {
+    if (e.code === 'ArrowLeft' || e.code === 'ArrowRight') {
+        bakhredinKeys[e.code] = true;
+    } else if (e.code === 'Space') {
+        if (!bakhredinRasulPos.isJumping) {
+            bakhredinRasulPos.velocityY = 7;
+            bakhredinRasulPos.isJumping = true;
+        }
+    } else if (e.code === 'KeyS') {
+        // Проверка близости к Бахредину
+        if (isNearBakhredin()) {
+            // Каждый раз при нажатии S — показываем атаку
+            document.getElementById('bakhredinRasul').style.display = 'none';
+            document.getElementById('bakhredinRasulAttack').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('bakhredinRasul').style.display = 'block';
+                document.getElementById('bakhredinRasulAttack').style.display = 'none';
+            }, 1200);
+            // Анимация ухода Бахредина вправо + скрытие диалога
+            const bakhredinChar = document.getElementById('bakhredinChar');
+            const bakhredinDialog = document.getElementById('bakhredinDialog');
+            if (bakhredinChar.style.display !== 'none') {
+                bakhredinChar.classList.add('bakhredin-exit-right');
+                bakhredinDialog.style.display = 'none';
+                setTimeout(() => {
+                    bakhredinChar.style.display = 'none';
+                    // Переход к story7Slides
+                    startStory7Slides();
+                }, 1200);
+            }
+        }
+    }
+}
+
+function bakhredinKeyUp(e) {
+    if (e.code === 'ArrowLeft' || e.code === 'ArrowRight') {
+        bakhredinKeys[e.code] = false;
+    }
+}
+
+function animateBakhredinRasul() {
+    if (document.getElementById('scene5Screen').classList.contains('active')) {
+        updateBakhredinRasulPosition();
+        requestAnimationFrame(animateBakhredinRasul);
+    }
+}
+
+function updateBakhredinRasulPosition() {
+    // Горизонтальное движение
+    if (bakhredinKeys['ArrowLeft'] && bakhredinRasulPos.x > 0) {
+        bakhredinRasulPos.x -= 0.7;
+    }
+    if (bakhredinKeys['ArrowRight'] && bakhredinRasulPos.x < 60) {
+        bakhredinRasulPos.x += 0.7;
+    }
+    // Прыжок
+    if (bakhredinRasulPos.isJumping) {
+        bakhredinRasulPos.y += bakhredinRasulPos.velocityY;
+        bakhredinRasulPos.velocityY -= 0.7;
+        if (bakhredinRasulPos.y <= 2) {
+            bakhredinRasulPos.y = 2;
+            bakhredinRasulPos.velocityY = 0;
+            bakhredinRasulPos.isJumping = false;
+        }
+    }
+    // Применить позицию
+    const rasul = document.getElementById('bakhredinRasul');
+    const rasulAttack = document.getElementById('bakhredinRasulAttack');
+    rasul.style.left = rasulAttack.style.left = bakhredinRasulPos.x + '%';
+    rasul.style.bottom = rasulAttack.style.bottom = bakhredinRasulPos.y + '%';
+}
+
+function isNearBakhredin() {
+    // Если Расул ближе 30% к правому краю (где стоит Бахредин)
+    return bakhredinRasulPos.x > 45;
+}
+
+// --- Платформер Mario-style ---
+function startPlatformerScene() {
+    showScreen('scene6');
+    const canvas = document.getElementById('platformerCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Платформы (x, y, width, height)
+    const platforms = [
+        {x:0, y:550, w:1200, h:50},
+        {x:200, y:450, w:180, h:20},
+        {x:500, y:370, w:160, h:20},
+        {x:800, y:300, w:120, h:20},
+        {x:1050, y:200, w:100, h:20},
+        {x:350, y:250, w:100, h:20},
+        {x:700, y:170, w:80, h:20}
+    ];
+    // Препятствие (красный блок)
+    const obstacles = [
+        {x:600, y:530, w:60, h:20}
+    ];
+
+    // Персонаж
+    let rasul = {
+        x: 60, y: 500, w: 60, h: 90,
+        vx: 0, vy: 0,
+        onGround: false,
+        img: new Image(),
+        walkImg: new Image(),
+        walkFrame: 0
+    };
+    rasul.img.src = 'assets/Rasul.png';
+    rasul.walkImg.src = 'assets/Rasulwithlaptop.gif';
+
+    let keys = {};
+
+    document.onkeydown = e => keys[e.code] = true;
+    document.onkeyup = e => keys[e.code] = false;
+
+    function draw() {
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        // Платформы
+        ctx.fillStyle = '#222';
+        platforms.forEach(p => ctx.fillRect(p.x, p.y, p.w, p.h));
+        // Препятствия
+        ctx.fillStyle = '#ff2222';
+        obstacles.forEach(o => ctx.fillRect(o.x, o.y, o.w, o.h));
+        // Персонаж
+        let img = (Math.abs(rasul.vx)>0.5) ? rasul.walkImg : rasul.img;
+        ctx.drawImage(img, rasul.x, rasul.y, rasul.w, rasul.h);
+    }
+
+    function update() {
+        // Управление
+        if (keys['ArrowLeft']) rasul.vx = -4;
+        else if (keys['ArrowRight']) rasul.vx = 4;
+        else rasul.vx = 0;
+        if (keys['Space'] && rasul.onGround) {
+            rasul.vy = -13;
+            rasul.onGround = false;
+        }
+        // Физика
+        rasul.x += rasul.vx;
+        rasul.y += rasul.vy;
+        rasul.vy += 0.7; // гравитация
+        // Границы
+        if (rasul.x < 0) rasul.x = 0;
+        if (rasul.x + rasul.w > canvas.width) rasul.x = canvas.width - rasul.w;
+        if (rasul.y > canvas.height - rasul.h) {
+            rasul.y = canvas.height - rasul.h;
+            rasul.vy = 0;
+            rasul.onGround = true;
+        }
+        // Платформы
+        rasul.onGround = false;
+        for (let p of platforms) {
+            if (rasul.x + rasul.w > p.x && rasul.x < p.x + p.w &&
+                rasul.y + rasul.h > p.y && rasul.y + rasul.h < p.y + p.h + 20 && rasul.vy >= 0) {
+                rasul.y = p.y - rasul.h;
+                rasul.vy = 0;
+                rasul.onGround = true;
+            }
+        }
+        // Препятствия (reset)
+        for (let o of obstacles) {
+            if (rasul.x + rasul.w > o.x && rasul.x < o.x + o.w &&
+                rasul.y + rasul.h > o.y && rasul.y < o.y + o.h) {
+                rasul.x = 60; rasul.y = 500; rasul.vx = 0; rasul.vy = 0;
+            }
+        }
+    }
+
+    function loop() {
+        update();
+        draw();
+        requestAnimationFrame(loop);
+    }
+    loop();
+}
+
 // Game functions removed - no longer needed 
+
+// --- Story slides перед платформером ---
+const story7Slides = [
+    'Преодолев Бахредина, Расул отправился дальше... ',
+    'Но впереди его ждали новые испытания!',
+    'На пути появились платформы и опасные препятствия...'
+];
+let story7Index = 0;
+let story7Typing = false;
+
+function startStory7Slides() {
+    showScreen('story7');
+    story7Index = 0;
+    showStory7Slide(0);
+    document.getElementById('story7Screen').onclick = nextStory7Slide;
+}
+
+function showStory7Slide(idx) {
+    // Hide all
+    for (let i=1; i<=3; ++i) document.getElementById('story7slide'+i).style.display = 'none';
+    document.getElementById('story7slide'+(idx+1)).style.display = 'block';
+    const textEl = document.getElementById('story7Text'+(idx+1));
+    story7Typing = true;
+    typeDialogText(textEl, story7Slides[idx], 35, () => { story7Typing = false; });
+}
+
+function nextStory7Slide() {
+    if (story7Typing) return;
+    story7Index++;
+    if (story7Index < story7Slides.length) {
+        showStory7Slide(story7Index);
+    } else {
+        startPlatformerScene();
+    }
+} 
