@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rasul's Run - N Factorial Adventure</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Start Screen -->
+    <div id="startScreen" class="screen active">
+        <div class="start-content">
+            <h1 class="pixel-title">Rasul's Run</h1>
+            <p class="pixel-subtitle">Click anywhere to begin the story...</p>
+        </div>
+    </div>
+
+    <!-- Story Slides -->
+    <div id="storyScreen" class="screen">
+        <div class="skip-button pixel-text" onclick="skipStory()">SKIP STORY →</div>
+        
+        <div class="story-slide" id="slide1">
+            <div class="story-text pixel-text" id="storyText1"></div>
+            <div class="continue-hint pixel-text">Click to continue or SKIP →</div>
+        </div>
+        
+        <div class="story-slide" id="slide2">
+            <div class="story-text pixel-text" id="storyText2"></div>
+            <div class="continue-hint pixel-text">Click to continue or SKIP →</div>
+        </div>
+        
+        <div class="story-slide" id="slide3">
+            <div class="story-text pixel-text" id="storyText3"></div>
+            <div class="continue-hint pixel-text">Click to continue or SKIP →</div>
+        </div>
+        
+        <div class="story-slide" id="slide4">
+            <div class="story-text pixel-text" id="storyText4"></div>
+            <div class="continue-hint pixel-text">Click to continue or SKIP →</div>
+        </div>
+    </div>
+
+    <!-- Animated Scenes -->
+    <div id="scene1Screen" class="screen">
+        <div class="scene-container">
+            <img src="assets/image.gif" alt="Scene 1" class="scene-image">
+        </div>
+    </div>
+    
+    <div id="scene2Screen" class="screen">
+        <div class="scene-container">
+            <img src="assets/image (2).gif" alt="Scene 2" class="scene-image">
+        </div>
+    </div>
+    
+    <div id="scene3Screen" class="screen">
+        <div class="scene-container shock-animation">
+            <img src="assets/dm.jpg" alt="Demo Day" class="scene-image shock-image">
+            <div class="shock-text pixel-text">DEMO DAY!</div>
+        </div>
+    </div>
+    
+    <div id="scene4Screen" class="screen">
+        <div class="interactive-scene-container">
+            <img src="assets/Rasul.png" alt="Rasul" class="rasul-character" id="rasulCharacter">
+            <div class="controls-hint pixel-text">
+                Use ← → arrows to move, SPACE to jump
+            </div>
+        </div>
+    </div>
+
+    <!-- End Screen -->
+    <div id="endScreen" class="screen">
+        <div class="end-content">
+            <h1 class="pixel-title">TO BE CONTINUED...</h1>
+            <p class="pixel-subtitle">Click to restart Rasul's story</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 

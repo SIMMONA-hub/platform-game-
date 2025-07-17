@@ -1,0 +1,308 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Press Start 2P', cursive;
+    background: #000;
+    color: #00ff00;
+    overflow: hidden;
+    user-select: none;
+}
+
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: none;
+    background: #000;
+}
+
+.screen.active {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Start Screen */
+#startScreen {
+    background: #000;
+    position: relative;
+    overflow: hidden;
+}
+
+.start-content {
+    background: rgba(0, 0, 0, 0.9);
+    padding: 40px;
+    border: 4px solid #00ff00;
+    text-align: center;
+    border-radius: 0;
+    position: relative;
+    z-index: 2;
+}
+
+.pixel-title {
+    font-size: 32px;
+    color: #00ff00;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 0px #004400;
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+.pixel-subtitle {
+    font-size: 12px;
+    color: #ffff00;
+    animation: blink 1.5s infinite;
+}
+
+/* Story Screen */
+#storyScreen {
+    background: #000;
+    padding: 50px;
+    justify-content: center;
+    align-items: center;
+}
+
+.story-slide {
+    display: none;
+    width: 100%;
+    max-width: 800px;
+    text-align: center;
+}
+
+.story-slide.active {
+    display: block;
+}
+
+.story-text {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #00ff00;
+    margin-bottom: 40px;
+    min-height: 300px;
+    padding: 20px;
+    border: 2px solid #004400;
+    background: rgba(0, 68, 0, 0.1);
+}
+
+.continue-hint {
+    font-size: 12px;
+    color: #ffff00;
+    animation: blink 1s infinite;
+}
+
+.skip-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 14px;
+    color: #ff6600;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 10px 15px;
+    border: 2px solid #ff6600;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s ease;
+}
+
+.skip-button:hover {
+    background: rgba(255, 102, 0, 0.2);
+    color: #fff;
+    transform: scale(1.1);
+}
+
+.pixel-text {
+    font-family: 'Press Start 2P', cursive;
+    letter-spacing: 1px;
+}
+
+/* End Screen */
+#endScreen {
+    background: #000;
+}
+
+.end-content {
+    background: rgba(0, 0, 0, 0.9);
+    padding: 60px;
+    border: 4px solid #ff0000;
+    text-align: center;
+    border-radius: 0;
+    position: relative;
+    z-index: 2;
+}
+
+/* Animations */
+@keyframes glow {
+    from { text-shadow: 2px 2px 0px #004400, 0 0 10px #00ff00; }
+    to { text-shadow: 2px 2px 0px #004400, 0 0 20px #00ff00, 0 0 30px #00ff00; }
+}
+
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+@keyframes typewriter {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+@keyframes fall {
+    from {
+        transform: translateY(-100px) rotate(0deg);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+.falling-item {
+    position: absolute;
+    font-size: 30px;
+    pointer-events: none;
+    animation: fall 3s linear forwards;
+    z-index: 1;
+}
+
+/* Scene Screens */
+.scene-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #000;
+    position: relative;
+}
+
+.scene-image {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+}
+
+/* Interactive Scene with Background */
+.interactive-scene-container {
+    width: 100%;
+    height: 100%;
+    background-image: url('assets/image (3).gif');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #000;
+    position: relative;
+    overflow: hidden;
+}
+
+.rasul-character {
+    position: absolute;
+    width: 350px;
+    height: 490px;
+    bottom: 2%;
+    left: 50%;
+    transform: translateX(-50%);
+    object-fit: contain;
+    z-index: 10;
+    transition: left 0.08s ease;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+.controls-hint {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    color: #ffff00;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 10px 15px;
+    border: 2px solid #ffff00;
+    border-radius: 0;
+    z-index: 5;
+    text-align: center;
+}
+
+/* Shock Animation */
+.shock-animation {
+    animation: shock 0.1s ease-in-out infinite;
+}
+
+.shock-image {
+    filter: brightness(1.5) contrast(1.2);
+}
+
+.shock-text {
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 72px;
+    color: #ff0000;
+    font-weight: bold;
+    text-shadow: 
+        0 0 5px #ff0000,
+        0 0 10px #ff0000,
+        0 0 15px #ff0000,
+        0 0 20px #ff0000,
+        0 0 35px #ff0000,
+        0 0 40px #ff0000,
+        3px 3px 0px #660000,
+        6px 6px 0px #330000,
+        9px 9px 0px #110000;
+    animation: threateningText 0.12s ease-in-out infinite;
+    letter-spacing: 8px;
+}
+
+@keyframes shock {
+    0% { transform: translate(0, 0); }
+    25% { transform: translate(-3px, -3px); }
+    50% { transform: translate(3px, -3px); }
+    75% { transform: translate(-3px, 3px); }
+    100% { transform: translate(3px, 3px); }
+}
+
+@keyframes threateningText {
+    0% { 
+        transform: translateX(-50%) scale(1) rotate(-0.5deg);
+        opacity: 1;
+        color: #ff0000;
+    }
+    25% { 
+        transform: translateX(-50%) scale(1.05) rotate(0.5deg);
+        opacity: 0.9;
+        color: #ff3300;
+    }
+    50% { 
+        transform: translateX(-50%) scale(1.1) rotate(-0.5deg);
+        opacity: 0.8;
+        color: #ff6600;
+    }
+    75% { 
+        transform: translateX(-50%) scale(1.05) rotate(0.5deg);
+        opacity: 0.9;
+        color: #ff3300;
+    }
+    100% { 
+        transform: translateX(-50%) scale(1) rotate(-0.5deg);
+        opacity: 1;
+        color: #ff0000;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .pixel-title { font-size: 24px; }
+    .pixel-subtitle { font-size: 10px; }
+    .story-text { font-size: 14px; }
+} 
