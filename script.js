@@ -204,10 +204,35 @@ function startScenes() {
                 // Scene 4: Interactive scene with Rasul character (бесконечно)
                 showScreen('scene4');
                 startInteractiveScene();
-                // Больше не переходим к endScreen автоматически!
+                // Через 7 секунд появляется Бахредин
+                setTimeout(() => {
+                    stopInteractiveScene();
+                    startBakhredinScene();
+                }, 7000);
             }, 2000); // 2 seconds for dm.jpg
         }, 3000); // 3 seconds for image(2).gif
     }, 3000); // 3 seconds for image.gif
+}
+
+function startBakhredinScene() {
+    showScreen('scene5');
+    const dialog = [
+        'Ты что уходишь рано? Других не знаю, но мои ментики остаются даже до 6!'
+    ];
+    typeDialogText(document.getElementById('bakhredinDialog'), dialog[0]);
+}
+
+function typeDialogText(element, text, speed = 35) {
+    element.textContent = '';
+    let i = 0;
+    function typeChar() {
+        if (i < text.length) {
+            element.textContent += text.charAt(i);
+            i++;
+            setTimeout(typeChar, speed);
+        }
+    }
+    typeChar();
 }
 
 function showEndScreen() {
