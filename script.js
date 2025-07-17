@@ -708,25 +708,26 @@ function bernarKeyDown(e) {
             bernarRasulPos.isJumping = true;
         }
     } else if (e.code === 'KeyS') {
-        if (isNearBernar()) {
-            if (!bernarAttackActive) {
-                bernarAttackActive = true;
-                document.querySelector('.bernar-rasul-character').style.display = 'none';
-                document.querySelector('.bernar-rasul-attack').style.display = 'block';
-            } else {
-                // Второе нажатие S — Бернар уходит вправо
-                const bernarChar = document.getElementById('bernarChar');
-                const bernarDialog = document.getElementById('bernarDialog');
-                if (bernarChar.style.display !== 'none') {
-                    bernarChar.classList.add('bakhredin-exit-right');
-                    bernarDialog.style.display = 'none';
-                    setTimeout(() => {
-                        bernarChar.style.display = 'none';
-                        // Переход к следующей сцене
-                        startPlatformerScene();
-                    }, 1200);
-                }
-            }
+        if (isNearBernar() && !bernarAttackActive) {
+            bernarAttackActive = true;
+            // Показать атаку
+            document.querySelector('.bernar-rasul-character').style.display = 'none';
+            document.querySelector('.bernar-rasul-attack').style.display = 'block';
+            
+            // Убрать Бернара
+            const bernarChar = document.getElementById('bernarChar');
+            const bernarDialog = document.getElementById('bernarDialog');
+            bernarChar.classList.add('bakhredin-exit-right');
+            bernarDialog.style.display = 'none';
+            
+            setTimeout(() => {
+                // Вернуть обычный спрайт Расула
+                document.querySelector('.bernar-rasul-character').style.display = 'block';
+                document.querySelector('.bernar-rasul-attack').style.display = 'none';
+                bernarChar.style.display = 'none';
+                // Переход к следующей сцене
+                startPlatformerScene();
+            }, 1200);
         }
     }
 }
@@ -766,8 +767,15 @@ function updateBernarRasulPosition() {
             bernarRasulPos.isJumping = false;
         }
     }
-    // Применить позицию
+    // Применить позицию к обоим спрайтам
     const rasul = document.querySelector('.bernar-rasul-character');
-    rasul.style.left = bernarRasulPos.x + '%';
-    rasul.style.bottom = bernarRasulPos.y + '%';
+    const rasulAttack = document.querySelector('.bernar-rasul-attack');
+    if (rasul) {
+        rasul.style.left = bernarRasulPos.x + '%';
+        rasul.style.bottom = bernarRasulPos.y + '%';
+    }
+    if (rasulAttack) {
+        rasulAttack.style.left = bernarRasulPos.x + '%';
+        rasulAttack.style.bottom = bernarRasulPos.y + '%';
+    }
 } 

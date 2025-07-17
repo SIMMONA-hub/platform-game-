@@ -493,6 +493,21 @@ body {
     filter: drop-shadow(0 0 16px #000a);
 }
 
+.bernar-rasul-attack {
+    position: absolute;
+    left: 5%;
+    bottom: 2%;
+    width: 350px;
+    height: 490px;
+    object-fit: contain;
+    z-index: 20;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    filter: drop-shadow(0 0 16px #000a);
+    pointer-events: none;
+}
+
 .bernar-dialog {
     position: absolute;
     left: 50%;
