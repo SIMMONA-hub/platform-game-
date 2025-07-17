@@ -429,26 +429,36 @@ function isNearBakhredin() {
 function startPlatformerScene() {
     showScreen('scene6');
     const canvas = document.getElementById('platformerCanvas');
+    canvas.width = window.innerWidth * 0.9;
+    canvas.height = window.innerHeight * 0.8;
     const ctx = canvas.getContext('2d');
 
     // Платформы (x, y, width, height)
     const platforms = [
-        {x:0, y:550, w:1200, h:50},
-        {x:200, y:450, w:180, h:20},
-        {x:500, y:370, w:160, h:20},
-        {x:800, y:300, w:120, h:20},
-        {x:1050, y:200, w:100, h:20},
-        {x:350, y:250, w:100, h:20},
-        {x:700, y:170, w:80, h:20}
+        {x:0, y:canvas.height-50, w:canvas.width, h:50},
+        {x:canvas.width*0.18, y:canvas.height-150, w:180, h:20},
+        {x:canvas.width*0.42, y:canvas.height-230, w:160, h:20},
+        {x:canvas.width*0.68, y:canvas.height-300, w:120, h:20},
+        {x:canvas.width*0.88, y:canvas.height-400, w:100, h:20},
+        {x:canvas.width*0.3, y:canvas.height-420, w:100, h:20},
+        {x:canvas.width*0.6, y:canvas.height-500, w:80, h:20}
     ];
-    // Препятствие (красный блок)
+    // Препятствия: типы - red (опасные), blue (можно стоять), green (двигаются)
     const obstacles = [
-        {x:600, y:530, w:60, h:20}
+        {x:canvas.width*0.5, y:canvas.height-70, w:60, h:20, type:'red'},
+        {x:canvas.width*0.25, y:canvas.height-170, w:60, h:20, type:'blue'},
+        {x:canvas.width*0.7, y:canvas.height-320, w:60, h:20, type:'green', dir:1}
     ];
+    // Дверь (рядом с верхним правым блоком)
+    const door = {
+        x: canvas.width*0.88 + 120, y: canvas.height-400-100, w: 44, h: 100,
+        open: false, openAnim: 0
+    };
+    let doorOpening = false;
 
-    // Персонаж
+    // Персонаж (крупнее)
     let rasul = {
-        x: 60, y: 500, w: 60, h: 90,
+        x: 60, y: canvas.height-140, w: 110, h: 160,
         vx: 0, vy: 0,
         onGround: false,
         img: new Image(),
@@ -469,8 +479,47 @@ function startPlatformerScene() {
         ctx.fillStyle = '#222';
         platforms.forEach(p => ctx.fillRect(p.x, p.y, p.w, p.h));
         // Препятствия
-        ctx.fillStyle = '#ff2222';
-        obstacles.forEach(o => ctx.fillRect(o.x, o.y, o.w, o.h));
+        for (let o of obstacles) {
+            if (o.type==='red') ctx.fillStyle = '#ff2222';
+            else if (o.type==='blue') ctx.fillStyle = '#2288ff';
+            else if (o.type==='green') ctx.fillStyle = '#22cc44';
+            ctx.fillRect(o.x, o.y, o.w, o.h);
+        }
+        // Красивая дверь с аркой, ручкой и панелями
+        if (!door.open) {
+            ctx.save();
+            ctx.globalAlpha = 1-door.openAnim;
+            ctx.translate(door.x + door.w/2 + door.openAnim*120, door.y + door.h/2);
+            ctx.rotate(door.openAnim * 0.7);
+            // Светящийся контур
+            ctx.shadowColor = '#00ffe6';
+            ctx.shadowBlur = 18;
+            // Арка
+            ctx.beginPath();
+            ctx.moveTo(-door.w/2, -door.h/2+20);
+            ctx.lineTo(-door.w/2, door.h/2);
+            ctx.lineTo(door.w/2, door.h/2);
+            ctx.lineTo(door.w/2, -door.h/2+20);
+            ctx.arc(0, -door.h/2+20, door.w/2, Math.PI, 0, false);
+            ctx.closePath();
+            ctx.fillStyle = '#1a2a4d';
+            ctx.fill();
+            ctx.shadowBlur = 0;
+            // Панели
+            ctx.strokeStyle = '#3a4a7d';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(-door.w/2+7, -door.h/2+35, door.w-14, 20);
+            ctx.strokeRect(-door.w/2+7, -door.h/2+60, door.w-14, 28);
+            // Ручка
+            ctx.beginPath();
+            ctx.arc(door.w/2-12, 0, 7, 0, 2*Math.PI);
+            ctx.fillStyle = '#ffd700';
+            ctx.shadowColor = '#fff8b0';
+            ctx.shadowBlur = 10;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+            ctx.restore();
+        }
         // Персонаж
         let img = (Math.abs(rasul.vx)>0.5) ? rasul.walkImg : rasul.img;
         ctx.drawImage(img, rasul.x, rasul.y, rasul.w, rasul.h);
@@ -478,17 +527,17 @@ function startPlatformerScene() {
 
     function update() {
         // Управление
-        if (keys['ArrowLeft']) rasul.vx = -4;
-        else if (keys['ArrowRight']) rasul.vx = 4;
+        if (keys['ArrowLeft']) rasul.vx = -6;
+        else if (keys['ArrowRight']) rasul.vx = 6;
         else rasul.vx = 0;
         if (keys['Space'] && rasul.onGround) {
-            rasul.vy = -13;
+            rasul.vy = -18;
             rasul.onGround = false;
         }
         // Физика
         rasul.x += rasul.vx;
         rasul.y += rasul.vy;
-        rasul.vy += 0.7; // гравитация
+        rasul.vy += 1.1; // гравитация
         // Границы
         if (rasul.x < 0) rasul.x = 0;
         if (rasul.x + rasul.w > canvas.width) rasul.x = canvas.width - rasul.w;
@@ -507,11 +556,45 @@ function startPlatformerScene() {
                 rasul.onGround = true;
             }
         }
-        // Препятствия (reset)
+        // Препятствия
         for (let o of obstacles) {
-            if (rasul.x + rasul.w > o.x && rasul.x < o.x + o.w &&
+            // Красные — сбрасывают
+            if (o.type==='red' && rasul.x + rasul.w > o.x && rasul.x < o.x + o.w &&
                 rasul.y + rasul.h > o.y && rasul.y < o.y + o.h) {
-                rasul.x = 60; rasul.y = 500; rasul.vx = 0; rasul.vy = 0;
+                rasul.x = 60; rasul.y = canvas.height-140; rasul.vx = 0; rasul.vy = 0;
+            }
+            // Синие — можно стоять
+            if (o.type==='blue' && rasul.x + rasul.w > o.x && rasul.x < o.x + o.w &&
+                rasul.y + rasul.h > o.y && rasul.y + rasul.h < o.y + o.h + 20 && rasul.vy >= 0) {
+                rasul.y = o.y - rasul.h;
+                rasul.vy = 0;
+                rasul.onGround = true;
+            }
+            // Зелёные — двигаются
+            if (o.type==='green') {
+                o.x += o.dir * 2;
+                if (o.x < canvas.width*0.6 || o.x > canvas.width*0.8) o.dir *= -1;
+                // Можно стоять
+                if (rasul.x + rasul.w > o.x && rasul.x < o.x + o.w &&
+                    rasul.y + rasul.h > o.y && rasul.y + rasul.h < o.y + o.h + 20 && rasul.vy >= 0) {
+                    rasul.y = o.y - rasul.h;
+                    rasul.vy = 0;
+                    rasul.onGround = true;
+                    rasul.x += o.dir * 2; // едет вместе с платформой
+                }
+            }
+        }
+        // Дверь — анимация открытия
+        if (!door.open && rasul.x + rasul.w > door.x && rasul.x < door.x + door.w &&
+            rasul.y + rasul.h > door.y && rasul.y < door.y + door.h && !doorOpening) {
+            doorOpening = true;
+        }
+        if (doorOpening && !door.open) {
+            door.openAnim += 0.04;
+            if (door.openAnim >= 1) {
+                door.openAnim = 1;
+                door.open = true;
+                setTimeout(nextLocation, 400);
             }
         }
     }
@@ -522,6 +605,12 @@ function startPlatformerScene() {
         requestAnimationFrame(loop);
     }
     loop();
+}
+
+function nextLocation() {
+    // alert('Следующая локация! (Здесь может быть новый уровень или сцена)');
+    startBernarScene();
+    // Здесь можно вызвать другую функцию или сцену
 }
 
 // Game functions removed - no longer needed 
@@ -559,4 +648,126 @@ function nextStory7Slide() {
     } else {
         startPlatformerScene();
     }
+} 
+
+// --- Сцена с Бернаром ---
+const bernarDialogLines = [
+    'Эй, ты куда уходишь с Demo Day? Я же тебе помогал, не помнишь?',
+    'Кто тебе поднимал Docker, когда у тебя всё падало? Кто деплой на сервер сделал?',
+    'А ты даже спасибо не сказал! Ну поколение пошло сейчас... Всё через чат-GPT делают!',
+    'Ладно, удачи тебе, но помни — без команды далеко не уедешь!'
+];
+let bernarDialogIndex = 0;
+let bernarTyping = false;
+
+// Управление Расулом в сцене с Бернаром
+let bernarRasulPos = { x: 5, y: 2, velocityY: 0, isJumping: false };
+let bernarKeys = {};
+let bernarAttackActive = false;
+
+function startBernarScene() {
+    showScreen('sceneBernar');
+    bernarDialogIndex = 0;
+    showBernarDialogLine();
+    document.getElementById('sceneBernarScreen').onclick = nextBernarDialog;
+    // Управление
+    bernarRasulPos = { x: 5, y: 2, velocityY: 0, isJumping: false };
+    bernarKeys = {};
+    updateBernarRasulPosition();
+    window.addEventListener('keydown', bernarKeyDown);
+    window.addEventListener('keyup', bernarKeyUp);
+    animateBernarRasul();
+}
+
+function showBernarDialogLine() {
+    const dialogBox = document.getElementById('bernarDialog');
+    dialogBox.textContent = '';
+    bernarTyping = true;
+    typeDialogText(dialogBox, bernarDialogLines[bernarDialogIndex], 35, () => {
+        bernarTyping = false;
+    });
+}
+
+function nextBernarDialog() {
+    if (bernarTyping) return;
+    bernarDialogIndex++;
+    if (bernarDialogIndex < bernarDialogLines.length) {
+        showBernarDialogLine();
+    } else {
+        // Здесь можно вызвать следующую сцену или платформер
+        startPlatformerScene();
+    }
+} 
+
+function bernarKeyDown(e) {
+    if (e.code === 'ArrowLeft' || e.code === 'ArrowRight') {
+        bernarKeys[e.code] = true;
+    } else if (e.code === 'Space') {
+        if (!bernarRasulPos.isJumping) {
+            bernarRasulPos.velocityY = 7;
+            bernarRasulPos.isJumping = true;
+        }
+    } else if (e.code === 'KeyS') {
+        if (isNearBernar()) {
+            if (!bernarAttackActive) {
+                bernarAttackActive = true;
+                document.querySelector('.bernar-rasul-character').style.display = 'none';
+                document.querySelector('.bernar-rasul-attack').style.display = 'block';
+            } else {
+                // Второе нажатие S — Бернар уходит вправо
+                const bernarChar = document.getElementById('bernarChar');
+                const bernarDialog = document.getElementById('bernarDialog');
+                if (bernarChar.style.display !== 'none') {
+                    bernarChar.classList.add('bakhredin-exit-right');
+                    bernarDialog.style.display = 'none';
+                    setTimeout(() => {
+                        bernarChar.style.display = 'none';
+                        // Переход к следующей сцене
+                        startPlatformerScene();
+                    }, 1200);
+                }
+            }
+        }
+    }
+}
+
+function isNearBernar() {
+    return bernarRasulPos.x > 45;
+}
+
+function bernarKeyUp(e) {
+    if (e.code === 'ArrowLeft' || e.code === 'ArrowRight') {
+        bernarKeys[e.code] = false;
+    }
+}
+
+function animateBernarRasul() {
+    if (document.getElementById('sceneBernarScreen').classList.contains('active')) {
+        updateBernarRasulPosition();
+        requestAnimationFrame(animateBernarRasul);
+    }
+}
+
+function updateBernarRasulPosition() {
+    // Горизонтальное движение
+    if (bernarKeys['ArrowLeft'] && bernarRasulPos.x > 0) {
+        bernarRasulPos.x -= 0.7;
+    }
+    if (bernarKeys['ArrowRight'] && bernarRasulPos.x < 60) {
+        bernarRasulPos.x += 0.7;
+    }
+    // Прыжок
+    if (bernarRasulPos.isJumping) {
+        bernarRasulPos.y += bernarRasulPos.velocityY;
+        bernarRasulPos.velocityY -= 0.7;
+        if (bernarRasulPos.y <= 2) {
+            bernarRasulPos.y = 2;
+            bernarRasulPos.velocityY = 0;
+            bernarRasulPos.isJumping = false;
+        }
+    }
+    // Применить позицию
+    const rasul = document.querySelector('.bernar-rasul-character');
+    rasul.style.left = bernarRasulPos.x + '%';
+    rasul.style.bottom = bernarRasulPos.y + '%';
 } 

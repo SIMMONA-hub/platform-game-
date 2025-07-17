@@ -452,3 +452,62 @@ body {
     border: 3px solid #00ffcc;
     box-shadow: 0 0 24px #00ffcc44;
 } 
+
+.bernar-scene-container {
+    width: 100%;
+    height: 100%;
+    background-image: url('assets/image (3).gif');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #000;
+    position: relative;
+    overflow: hidden;
+}
+
+.bernar-rasul-character {
+    position: absolute;
+    left: 5%;
+    bottom: 2%;
+    width: 350px;
+    height: 490px;
+    object-fit: contain;
+    z-index: 10;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    filter: drop-shadow(0 0 16px #000a);
+}
+
+.bernar-character {
+    position: absolute;
+    right: 5%;
+    bottom: 2%;
+    width: 350px;
+    height: 490px;
+    object-fit: contain;
+    z-index: 10;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    filter: drop-shadow(0 0 16px #000a);
+}
+
+.bernar-dialog {
+    position: absolute;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%);
+    min-width: 320px;
+    max-width: 80vw;
+    background: rgba(0,0,0,0.85);
+    color: #fff;
+    border: 3px solid #00ffcc;
+    border-radius: 8px;
+    padding: 24px 32px;
+    font-size: 20px;
+    text-align: left;
+    z-index: 20;
+    box-shadow: 0 0 16px #00ffcc44;
+    letter-spacing: 1.5px;
+} 
