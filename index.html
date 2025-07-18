@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+    
     <!-- Start Screen -->
     <div id="startScreen" class="screen active">
         <div class="start-content">
@@ -64,7 +66,7 @@
         <div class="interactive-scene-container">
             <img src="assets/Rasul.png" alt="Rasul" class="rasul-character" id="rasulCharacter">
             <div class="controls-hint pixel-text">
-                Use ← → arrows to move, SPACE to jump
+                Стрелки ← → для движения, SPACE для прыжка
             </div>
         </div>
     </div>
@@ -117,7 +119,7 @@
             <img src="assets/Rasul.png" alt="Rasul" class="coin-rasul-character" id="coinRasul">
             <div class="coin-timer pixel-text" id="coinTimer">Time: 10</div>
             <div class="coin-score pixel-text" id="coinScore">Commits: 0</div>
-            <div class="coin-target pixel-text">Collect 10+ commits in 10 seconds!</div>
+            <div class="coin-target pixel-text">Собери 5+ коммитов за 10 секунд!</div>
         </div>
     </div>
 
@@ -125,8 +127,28 @@
     <div id="sceneAlikhanScreen" class="screen">
         <div class="alikhan-scene-container">
             <img src="assets/Rasul.png" alt="Rasul" class="alikhan-rasul-character">
+            <img src="assets/Rasulwithlaptop.gif" alt="Rasul Attack" class="alikhan-rasul-attack" style="display:none;">
             <img src="assets/alikhan.gif" alt="Alikhan" class="alikhan-character" id="alikhanChar">
             <div class="alikhan-dialog pixel-text" id="alikhanDialog"></div>
+            <div class="controls-hint pixel-text" style="bottom:10px;">Click or press ENTER to continue dialog</div>
+        </div>
+    </div>
+
+    <!-- Sad Rasul Scene -->
+    <div id="sceneSadRasulScreen" class="screen">
+        <div class="sad-rasul-scene-container">
+            <img src="assets/Rasul.png" alt="Rasul" class="sad-rasul-character">
+            <div class="sad-rasul-text pixel-text">Расулу грустно уходить...</div>
+        </div>
+    </div>
+
+    <!-- Almas Scene -->
+    <div id="sceneAlmasScreen" class="screen">
+        <div class="almas-scene-container">
+            <img src="assets/Rasul.png" alt="Rasul" class="almas-rasul-character">
+            <img src="assets/Rasulwithlaptop.gif" alt="Rasul Attack" class="almas-rasul-attack" style="display:none;">
+            <img src="assets/Almas.gif" alt="Almas" class="almas-character" id="almasChar">
+            <div class="almas-dialog pixel-text" id="almasDialog"></div>
             <div class="controls-hint pixel-text" style="bottom:10px;">Click or press ENTER to continue dialog</div>
         </div>
     </div>
@@ -136,6 +158,13 @@
         <div class="cocacola-scene-container">
             <img src="assets/coca_cola.jpg" alt="CocaCola" class="cocacola-bg">
             <img src="assets/Rasul.png" alt="Rasul" class="cocacola-rasul">
+        </div>
+    </div>
+
+    <!-- Final Story Screen -->
+    <div id="finalStoryScreen" class="screen">
+        <div class="story-slide active">
+            <div id="finalStoryText" class="story-text pixel-text"></div>
         </div>
     </div>
 

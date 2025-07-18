@@ -679,6 +679,21 @@ body {
     filter: drop-shadow(0 0 16px #000a);
 }
 
+.alikhan-rasul-attack {
+    position: absolute;
+    left: 5%;
+    bottom: 2%;
+    width: 350px;
+    height: 490px;
+    object-fit: contain;
+    z-index: 20;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    filter: drop-shadow(0 0 16px #000a);
+    pointer-events: none;
+}
+
 .alikhan-character {
     position: absolute;
     right: 5%;
@@ -691,6 +706,21 @@ body {
     image-rendering: -moz-crisp-edges;
     image-rendering: crisp-edges;
     filter: drop-shadow(0 0 16px #000a);
+}
+
+.alikhan-exit-right {
+    animation: alikhan-exit-right-anim 1.2s ease-out forwards;
+}
+
+@keyframes alikhan-exit-right-anim {
+    from {
+        right: 5%;
+        opacity: 1;
+    }
+    to {
+        right: -50%;
+        opacity: 0;
+    }
 }
 
 .alikhan-dialog {
@@ -750,4 +780,139 @@ body {
     transform: translateX(-50%);
     image-rendering: pixelated;
     filter: drop-shadow(0 0 16px #000a);
+} 
+
+/* Sad Rasul Scene */
+.sad-rasul-scene-container {
+    width: 100%;
+    height: 100%;
+    background-image: url('assets/image (3).gif');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #000;
+    position: relative;
+    overflow: hidden;
+}
+
+.sad-rasul-character {
+    position: absolute;
+    left: 50%;
+    bottom: 2%;
+    width: 350px;
+    height: 490px;
+    object-fit: contain;
+    z-index: 10;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    transform: translateX(-50%);
+    filter: drop-shadow(0 0 16px #000a);
+}
+
+.sad-rasul-text {
+    position: absolute;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.85);
+    color: #fff;
+    border: 3px solid #ff6b6b;
+    border-radius: 8px;
+    padding: 24px 32px;
+    font-size: 20px;
+    text-align: center;
+    z-index: 20;
+    box-shadow: 0 0 16px #ff6b6b44;
+    letter-spacing: 1.5px;
+}
+
+/* Almas Scene */
+.almas-scene-container {
+    width: 100%;
+    height: 100%;
+    background-image: url('assets/coca_cola.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #000;
+    position: relative;
+    overflow: hidden;
+}
+
+.almas-rasul-character {
+    position: absolute;
+    left: 5%;
+    bottom: 2%;
+    width: 350px;
+    height: 490px;
+    object-fit: contain;
+    z-index: 10;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    filter: drop-shadow(0 0 16px #000a);
+}
+
+.almas-rasul-attack {
+    position: absolute;
+    left: 5%;
+    bottom: 2%;
+    width: 350px;
+    height: 490px;
+    object-fit: contain;
+    z-index: 20;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    filter: drop-shadow(0 0 16px #000a);
+    pointer-events: none;
+}
+
+.almas-character {
+    position: absolute;
+    right: 5%;
+    bottom: -5%;
+    width: 700px;
+    height: 700px;
+    object-fit: contain;
+    z-index: 10;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    filter: drop-shadow(0 0 16px #000a);
+}
+
+.almas-exit-right {
+    animation: almas-exit-right-anim 1.2s ease-out forwards;
+}
+
+@keyframes almas-exit-right-anim {
+    from {
+        right: 5%;
+        opacity: 1;
+    }
+    to {
+        right: -50%;
+        opacity: 0;
+    }
+}
+
+.almas-dialog {
+    position: absolute;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%);
+    min-width: 320px;
+    max-width: 80vw;
+    background: rgba(0,0,0,0.85);
+    color: #fff;
+    border: 3px solid #ffaa00;
+    border-radius: 8px;
+    padding: 24px 32px;
+    font-size: 20px;
+    text-align: left;
+    z-index: 20;
+    box-shadow: 0 0 16px #ffaa0044;
+    letter-spacing: 1.5px;
 } 

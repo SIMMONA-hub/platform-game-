@@ -10,13 +10,13 @@ let isInteractiveScene = false;
 
 // Story text for Rasul's adventure
 const storyTexts = [
-    "In the heart of N Factorial incubator, there lived a determined student named Rasul...\n\nHe had been working day and night on his revolutionary project for Demo Day.\n\nHis laptop was his trusted companion, filled with countless lines of code and dreams of success.",
+    "В сердце инкубатора N Factorial жил студент Расул...\n\nОн день и ночь работал над революционным проектом для Demo Day.\n\nЕго ноутбук был верным спутником, полным кода и мечтаний об успехе.",
     
-    "But fate had other plans...\n\nJust hours before the final Demo Day presentation, disaster struck!\n\n*CRACK* 💻⚡\n\nRasul's laptop screen went black. All his hard work seemed lost in an instant.",
+    "Но судьба распорядилась иначе...\n\nЗа несколько часов до финальной презентации Demo Day случилась катастрофа!\n\n*ТРЕСК* 💻⚡\n\nЭкран ноутбука Расула погас. Вся его работа казалась потерянной в мгновение.",
     
-    "Standing in the N Factorial corridors, Rasul faced a choice:\n\nGive up on his dreams... OR...\n\nRUN! Run from the incubator and find a way to save Demo Day!\n\nWith determination in his heart, he chose to RUN! 🏃‍♂️💨",
+    "Стоя в коридорах N Factorial, Расул столкнулся с выбором:\n\nСдаться и забыть о мечтах... ИЛИ...\n\nБЕЖАТЬ! Сбежать из инкубатора и найти способ спасти Demo Day!\n\nС решимостью в сердце он выбрал БЕЖАТЬ! 🏃‍♂️💨",
     
-    "Help Rasul escape from N Factorial incubator!\n\nCollect 🟢 commits to rebuild his project\nAvoid ❌ bugs that slow him down\nDodge 🔥 burnout that could stop him\nGrab ⚡ mentor hints for power boosts!\n\nReach Demo Day and save his presentation!"
+    "Помоги Расулу сбежать из инкубатора N Factorial!\n\nСобирай 🟢 коммиты для восстановления проекта\nИзбегай ❌ багов, которые замедляют\nУклоняйся от 🔥 выгорания, которое может остановить\nХватай ⚡ подсказки менторов для усиления!\n\nДостигни Demo Day и спаси презентацию!"
 ];
 
 // Removed game variables - no longer needed
@@ -140,6 +140,14 @@ function showScreen(screenName) {
         document.getElementById('sceneAlikhanScreen').classList.add('active');
     } else if (screenName === 'sceneCocaCola') {
         document.getElementById('sceneCocaColaScreen').classList.add('active');
+    } else if (screenName === 'finalStory') {
+        document.getElementById('finalStoryScreen').classList.add('active');
+    } else if (screenName === 'finalStoryScreen') {
+        document.getElementById('finalStoryScreen').classList.add('active');
+    } else if (screenName === 'sceneSadRasul') {
+        document.getElementById('sceneSadRasulScreen').classList.add('active');
+    } else if (screenName === 'sceneAlmas') {
+        document.getElementById('sceneAlmasScreen').classList.add('active');
     } else {
         document.getElementById(screenName + 'Screen').classList.add('active');
     }
@@ -225,10 +233,10 @@ function startScenes() {
 }
 
 let bakhredinDialogLines = [
-    'Ты что уходишь рано? Других не знаю, но мои ментики остаются даже до 6!',
-    'Я всю ночь кодил, мне бы домой хоть немного поспать...',
-    'Настоящие стартаперы не спят! Ты хочешь успеха или нет?',
-    'Я хочу, чтобы мой проект работал, а не чтобы я выгорел!',
+    'Куда собрался, герой? Мои ментики до 6 утра сидят!',
+    'Я всю ночь кодил, хочу поспать хоть час...',
+    'Настоящие стартаперы не спят! Или ты не настоящий?',
+    'Я хочу, чтобы проект работал, а не чтобы я выгорел!',
     'Выгоришь — значит не твое! Мои ментики не сдаются!'
 ];
 let bakhredinDialogIndex = 0;
@@ -662,10 +670,10 @@ function nextStory7Slide() {
 
 // --- Сцена с Бернаром ---
 const bernarDialogLines = [
-    'Эй, ты куда уходишь с Demo Day? Я же тебе помогал, не помнишь?',
-    'Кто тебе поднимал Docker, когда у тебя всё падало? Кто деплой на сервер сделал?',
-    'А ты даже спасибо не сказал! Ну поколение пошло сейчас... Всё через чат-GPT делают!',
-    'Ладно, удачи тебе, но помни — без команды далеко не уедешь!'
+    'Куда бежишь с Demo Day? Я же тебе помогал, забыл?',
+    'Кто тебе Docker поднимал, когда всё падало? Кто деплой делал?',
+    'А ты даже спасибо не сказал! Поколение нынче... Всё через чат-GPT!',
+    'Ладно, удачи! Но помни — без команды никуда не дойдешь!'
 ];
 let bernarDialogIndex = 0;
 let bernarTyping = false;
@@ -967,7 +975,7 @@ function collectCoin(coin, index) {
 function showCommitPopup(x) {
     const popup = document.createElement('div');
     popup.className = 'commit-popup';
-    popup.innerHTML = '+1 commit to github';
+    popup.innerHTML = '+1 коммит в github';
     popup.style.left = x + '%';
     popup.style.top = '60%';
     
@@ -989,8 +997,8 @@ function removeCoin(coinId) {
 }
 
 function updateCoinUI() {
-    document.getElementById('coinTimer').textContent = `Time: ${coinGameState.timeLeft}`;
-    document.getElementById('coinScore').textContent = `Commits: ${coinGameState.score}`;
+    document.getElementById('coinTimer').textContent = `Время: ${coinGameState.timeLeft}`;
+    document.getElementById('coinScore').textContent = `Коммиты: ${coinGameState.score}`;
 }
 
 function endCoinGame() {
@@ -1010,11 +1018,11 @@ function endCoinGame() {
     
     // Показать результат
     setTimeout(() => {
-        if (coinGameState.score >= 10) {
-            alert(`🎉 Поздравляю! Вы собрали ${coinGameState.score} коммитов! Переходим к следующей сцене...`);
+        if (coinGameState.score >= 5) {
+            alert(`🎉 Отлично! Собрал ${coinGameState.score} коммитов! Переходим дальше...`);
             startAlikhanScene(); // переходим к диалогу с Алиханом
         } else {
-            alert(`😔 Вы собрали только ${coinGameState.score} коммитов. Нужно было 10+. Попробуйте снова!`);
+            alert(`😔 Собрал только ${coinGameState.score} коммитов. Нужно было 5+. Попробуй еще раз!`);
             startCoinCollectionScene(); // перезапуск
         }
     }, 500);
@@ -1034,18 +1042,23 @@ function coinKeyUp(e) {
 
 // === Alikhan Scene ===
 const alikhanDialogLines = [
-    'Эй, Расул! Я видел твои коммиты в GitHub! Отличная работа!',
-    'Да, но это все фиксы багов... Ничего серьезного я не сделал.',
-    'Ты действительно собрал много коммитов за короткое время.',
+    'Эй, Расул! Видел твои коммиты в GitHub! Неплохо!',
+    'Да, но это все фиксы багов... Ничего серьезного.',
+    'Ты много коммитов собрал за короткое время.',
     'Это потому что у меня код был полон ошибок...',
-    'Такая активность показывает, что ты серьезно относишься к проекту.',
-    'Серьезно? Я просто пытаюсь не сломать то, что уже работает.',
-    'Продолжай в том же духе! Успехов в разработке! ',
-    'Спасибо, но я все еще не уверен, что мой код хоть кому-то нужен...',
-    '(Скобки))))))))))))))))'
+    'Такая активность показывает серьезность к проекту.',
+    'Серьезно? Я просто пытаюсь не сломать то, что работает.',
+    'Продолжай в том же духе! Успехов!',
+    'Спасибо, но я не уверен, что мой код кому-то нужен...',
+    ')))...'
 ];
 let alikhanDialogIndex = 0;
 let alikhanTyping = false;
+
+// Управление Расулом в сцене с Алиханом
+let alikhanRasulPos = { x: 5, y: 2, velocityY: 0, isJumping: false };
+let alikhanKeys = {};
+let alikhanAttackActive = false;
 
 function startAlikhanScene() {
     console.log('Starting Alikhan scene...'); // отладка
@@ -1054,8 +1067,18 @@ function startAlikhanScene() {
     showAlikhanDialogLine();
     document.getElementById('sceneAlikhanScreen').onclick = nextAlikhanDialog;
     
-    // Добавляем обработчик клавиши S
+    // Инициализация управления Расулом
+    alikhanRasulPos = { x: 5, y: 2, velocityY: 0, isJumping: false };
+    alikhanKeys = {};
+    alikhanAttackActive = false;
+    updateAlikhanRasulPosition();
+    
+    // Добавляем обработчики клавиш
     window.addEventListener('keydown', alikhanKeyDown);
+    window.addEventListener('keyup', alikhanKeyUp);
+    
+    // Запускаем анимацию движения
+    animateAlikhanRasul();
 }
 
 function showAlikhanDialogLine() {
@@ -1086,34 +1109,106 @@ function nextAlikhanDialog() {
     } else {
         // Диалог окончен, ждем нажатия S
         console.log('Alikhan dialog finished, waiting for S key...'); // отладка
-        showAlikhanFinalHint();
     }
 } 
 
-function showAlikhanFinalHint() {
-    // Показываем подсказку о нажатии S
-    const hintElement = document.createElement('div');
-    hintElement.className = 'controls-hint pixel-text';
-    hintElement.style.position = 'absolute';
-    hintElement.style.top = '20px';
-    hintElement.style.left = '50%';
-    hintElement.style.transform = 'translateX(-50%)';
-    hintElement.style.zIndex = '30';
-    hintElement.style.color = '#ffff00';
-    hintElement.style.fontSize = '18px';
-    hintElement.textContent = 'Press S to continue...';
-    
-    document.querySelector('.alikhan-scene-container').appendChild(hintElement);
-}
+
 
 function alikhanKeyDown(e) {
-    if (e.code === 'KeyS' && alikhanDialogIndex >= alikhanDialogLines.length) {
-        // Диалог окончен и нажата S - переходим к следующей сцене
-        console.log('S key pressed, moving to CocaCola scene...'); // отладка
-        window.removeEventListener('keydown', alikhanKeyDown);
-        startCocaColaScene();
+    if (e.code === 'ArrowLeft' || e.code === 'ArrowRight') {
+        alikhanKeys[e.code] = true;
+    } else if (e.code === 'Space') {
+        if (!alikhanRasulPos.isJumping) {
+            alikhanRasulPos.velocityY = 7;
+            alikhanRasulPos.isJumping = true;
+        }
+    } else if (e.code === 'KeyS') {
+        if (alikhanDialogIndex >= alikhanDialogLines.length) {
+            // Диалог окончен и нажата S - переходим к следующей сцене
+            console.log('S key pressed, moving to CocaCola scene...'); // отладка
+            window.removeEventListener('keydown', alikhanKeyDown);
+            window.removeEventListener('keyup', alikhanKeyUp);
+            startCocaColaScene();
+        } else if (!alikhanAttackActive) {
+            // Показать атаку
+            alikhanAttackActive = true;
+            document.querySelector('.alikhan-rasul-character').style.display = 'none';
+            document.querySelector('.alikhan-rasul-attack').style.display = 'block';
+            
+            // Убрать Алихана
+            const alikhanChar = document.getElementById('alikhanChar');
+            const alikhanDialog = document.getElementById('alikhanDialog');
+            alikhanChar.classList.add('alikhan-exit-right');
+            alikhanDialog.style.display = 'none';
+            
+            setTimeout(() => {
+                // Вернуть обычный спрайт Расула
+                document.querySelector('.alikhan-rasul-character').style.display = 'block';
+                document.querySelector('.alikhan-rasul-attack').style.display = 'none';
+                alikhanChar.style.display = 'none';
+                alikhanAttackActive = false;
+                
+                // Перейти к сцене с грустным Расулом
+                startSadRasulScene();
+            }, 1200);
+        }
     }
 }
+
+function alikhanKeyUp(e) {
+    if (e.code === 'ArrowLeft' || e.code === 'ArrowRight') {
+        alikhanKeys[e.code] = false;
+    }
+}
+
+function animateAlikhanRasul() {
+    if (document.getElementById('sceneAlikhanScreen').classList.contains('active')) {
+        updateAlikhanRasulPosition();
+        requestAnimationFrame(animateAlikhanRasul);
+    }
+}
+
+function updateAlikhanRasulPosition() {
+    // Горизонтальное движение
+    if (alikhanKeys['ArrowLeft'] && alikhanRasulPos.x > 0) {
+        alikhanRasulPos.x -= 0.7;
+    }
+    if (alikhanKeys['ArrowRight'] && alikhanRasulPos.x < 60) {
+        alikhanRasulPos.x += 0.7;
+    }
+    // Прыжок
+    if (alikhanRasulPos.isJumping) {
+        alikhanRasulPos.y += alikhanRasulPos.velocityY;
+        alikhanRasulPos.velocityY -= 0.7;
+        if (alikhanRasulPos.y <= 2) {
+            alikhanRasulPos.y = 2;
+            alikhanRasulPos.velocityY = 0;
+            alikhanRasulPos.isJumping = false;
+        }
+    }
+    // Применить позицию к обоим спрайтам
+    const rasul = document.querySelector('.alikhan-rasul-character');
+    const rasulAttack = document.querySelector('.alikhan-rasul-attack');
+    if (rasul) {
+        rasul.style.left = alikhanRasulPos.x + '%';
+        rasul.style.bottom = alikhanRasulPos.y + '%';
+    }
+    if (rasulAttack) {
+        rasulAttack.style.left = alikhanRasulPos.x + '%';
+        rasulAttack.style.bottom = alikhanRasulPos.y + '%';
+    }
+}
+
+// === Final Story ===
+const finalStoryTexts = [
+    'Вот он наконец сбежал с DemoDay...',
+    'Расул чувствовал облегчение, но и сомнения.',
+    'Может, он действительно мог бы сделать больше?'
+];
+let finalStoryIndex = 0;
+let finalStoryTyping = false;
+
+
 
 function startCocaColaScene() {
     showScreen('sceneCocaCola');
@@ -1126,3 +1221,405 @@ function startCocaColaScene() {
     cocaColaScreen.onclick = finishCocaCola;
     setTimeout(finishCocaCola, 2500);
 } 
+
+// === Sad Rasul Scene ===
+function startSadRasulScene() {
+    console.log('Starting sad Rasul scene...'); // отладка
+    showScreen('sceneSadRasul');
+    
+    // Через 5 секунд перейти к сцене с Алмасом
+    setTimeout(() => {
+        startAlmasScene();
+    }, 5000);
+}
+
+// === Almas Scene ===
+const almasDialogLines = [
+    'Эй, ты че Расул уходишь?',
+    'Ну ты лошок, бросил проект на полпути!',
+    'Настоящие программисты не сдаются!',
+    'Или ты не настоящий программист?',
+    'Ладно, иди домой спать, слабак!'
+];
+let almasDialogIndex = 0;
+let almasTyping = false;
+
+// Управление Расулом в сцене с Алмасом
+let almasRasulPos = { x: 5, y: 2, velocityY: 0, isJumping: false };
+let almasKeys = {};
+let almasAttackActive = false; 
+
+function startAlmasScene() {
+    console.log('Starting Almas scene...'); // отладка
+    showScreen('sceneAlmas');
+    almasDialogIndex = 0;
+    showAlmasDialogLine();
+    document.getElementById('sceneAlmasScreen').onclick = nextAlmasDialog;
+    
+    // Инициализация управления Расулом
+    almasRasulPos = { x: 5, y: 2, velocityY: 0, isJumping: false };
+    almasKeys = {};
+    almasAttackActive = false;
+    updateAlmasRasulPosition();
+    
+    // Добавляем обработчики клавиш
+    window.addEventListener('keydown', almasKeyDown);
+    window.addEventListener('keyup', almasKeyUp);
+    
+    // Запускаем анимацию движения
+    animateAlmasRasul();
+}
+
+function showAlmasDialogLine() {
+    console.log('Showing almas dialog line:', almasDialogIndex); // отладка
+    const dialogBox = document.getElementById('almasDialog');
+    dialogBox.textContent = '';
+    almasTyping = true;
+    
+    // Определяем, кто говорит (четные индексы - Алихан, нечетные - Расул)
+    const isAlmasSpeaking = almasDialogIndex % 2 === 0;
+    
+    // Устанавливаем соответствующий стиль
+    dialogBox.className = 'alikhan-dialog pixel-text ' + (isAlmasSpeaking ? 'alikhan-speaking' : 'rasul-speaking');
+    
+    typeDialogText(dialogBox, almasDialogLines[almasDialogIndex], 35, () => {
+        almasTyping = false;
+        console.log('Almas dialog line finished typing'); // отладка
+    });
+}
+
+function nextAlmasDialog() {
+    console.log('nextAlmasDialog called, almasTyping:', almasTyping); // отладка
+    if (almasTyping) return;
+    almasDialogIndex++;
+    console.log('almasDialogIndex:', almasDialogIndex, 'almasDialogLines.length:', almasDialogLines.length); // отладка
+    if (almasDialogIndex < almasDialogLines.length) {
+        showAlmasDialogLine();
+    } else {
+        // Диалог окончен, ждем нажатия S
+        console.log('Almas dialog finished, waiting for S key...'); // отладка
+    }
+} 
+
+
+
+function almasKeyDown(e) {
+    if (e.code === 'ArrowLeft' || e.code === 'ArrowRight') {
+        almasKeys[e.code] = true;
+    } else if (e.code === 'Space') {
+        if (!almasRasulPos.isJumping) {
+            almasRasulPos.velocityY = 7;
+            almasRasulPos.isJumping = true;
+        }
+    } else if (e.code === 'KeyS') {
+        if (!almasAttackActive) {
+            // Показать атаку
+            almasAttackActive = true;
+            document.querySelector('.almas-rasul-character').style.display = 'none';
+            document.querySelector('.almas-rasul-attack').style.display = 'block';
+            
+            // Убрать Алмаса
+            const almasChar = document.querySelector('.almas-character');
+            const almasDialog = document.querySelector('.almas-dialog');
+            almasChar.classList.add('almas-exit-right');
+            if (almasDialog) almasDialog.style.display = 'none';
+            
+            setTimeout(() => {
+                // Вернуть обычный спрайт Расула
+                document.querySelector('.almas-rasul-character').style.display = 'block';
+                document.querySelector('.almas-rasul-attack').style.display = 'none';
+                almasChar.style.display = 'none';
+                almasAttackActive = false;
+                
+                // Удаляем обработчики
+                document.getElementById('sceneAlmasScreen').onclick = null;
+                window.removeEventListener('keydown', almasKeyDown);
+                window.removeEventListener('keyup', almasKeyUp);
+                
+                // Показать финальный слайд
+                showFinalStorySlide();
+            }, 1200);
+        }
+    }
+}
+
+function almasKeyUp(e) {
+    if (e.code === 'ArrowLeft' || e.code === 'ArrowRight') {
+        almasKeys[e.code] = false;
+    }
+}
+
+function animateAlmasRasul() {
+    if (document.getElementById('sceneAlmasScreen').classList.contains('active')) {
+        updateAlmasRasulPosition();
+        requestAnimationFrame(animateAlmasRasul);
+    }
+}
+
+function updateAlmasRasulPosition() {
+    // Горизонтальное движение
+    if (almasKeys['ArrowLeft'] && almasRasulPos.x > 0) {
+        almasRasulPos.x -= 0.7;
+    }
+    if (almasKeys['ArrowRight'] && almasRasulPos.x < 60) {
+        almasRasulPos.x += 0.7;
+    }
+    // Прыжок
+    if (almasRasulPos.isJumping) {
+        almasRasulPos.y += almasRasulPos.velocityY;
+        almasRasulPos.velocityY -= 0.7;
+        if (almasRasulPos.y <= 2) {
+            almasRasulPos.y = 2;
+            almasRasulPos.velocityY = 0;
+            almasRasulPos.isJumping = false;
+        }
+    }
+    // Применить позицию к обоим спрайтам
+    const rasul = document.querySelector('.almas-rasul-character');
+    const rasulAttack = document.querySelector('.almas-rasul-attack');
+    if (rasul) {
+        rasul.style.left = almasRasulPos.x + '%';
+        rasul.style.bottom = almasRasulPos.y + '%';
+    }
+    if (rasulAttack) {
+        rasulAttack.style.left = almasRasulPos.x + '%';
+        rasulAttack.style.bottom = almasRasulPos.y + '%';
+    }
+} 
+
+// === CocaCola Scene ===
+const cocaColaDialogLines = [
+    'Эй, Расул! Ты сбежал с Demo Day!',
+    'Я тебе рад! Теперь ты настоящий стартапер!',
+    'Спасибо, но я не уверен, что мой код кому-то нужен...',
+    ')))...'
+];
+let cocaColaDialogIndex = 0;
+let cocaColaTyping = false;
+
+// Управление Расулом в сцене с Кока-Колой
+let cocaColaRasulPos = { x: 5, y: 2, velocityY: 0, isJumping: false };
+let cocaColaKeys = {};
+let cocaColaAttackActive = false;
+
+function startCocaColaScene() {
+    console.log('Starting CocaCola scene...'); // отладка
+    showScreen('sceneCocaCola');
+    cocaColaDialogIndex = 0;
+    showCocaColaDialogLine();
+    document.getElementById('sceneCocaColaScreen').onclick = nextCocaColaDialog;
+    
+    // Инициализация управления Расулом
+    cocaColaRasulPos = { x: 5, y: 2, velocityY: 0, isJumping: false };
+    cocaColaKeys = {};
+    cocaColaAttackActive = false;
+    updateCocaColaRasulPosition();
+    
+    // Добавляем обработчики клавиш
+    window.addEventListener('keydown', cocaColaKeyDown);
+    window.addEventListener('keyup', cocaColaKeyUp);
+    
+    // Запускаем анимацию движения
+    animateCocaColaRasul();
+}
+
+function showCocaColaDialogLine() {
+    console.log('Showing cocaCola dialog line:', cocaColaDialogIndex); // отладка
+    const dialogBox = document.getElementById('cocaColaDialog');
+    dialogBox.textContent = '';
+    cocaColaTyping = true;
+    
+    // Определяем, кто говорит (четные индексы - Кока-Кола, нечетные - Расул)
+    const isCocaColaSpeaking = cocaColaDialogIndex % 2 === 0;
+    
+    // Устанавливаем соответствующий стиль
+    dialogBox.className = 'alikhan-dialog pixel-text ' + (isCocaColaSpeaking ? 'alikhan-speaking' : 'rasul-speaking');
+    
+    typeDialogText(dialogBox, cocaColaDialogLines[cocaColaDialogIndex], 35, () => {
+        cocaColaTyping = false;
+        console.log('CocaCola dialog line finished typing'); // отладка
+    });
+}
+
+function nextCocaColaDialog() {
+    console.log('nextCocaColaDialog called, cocaColaTyping:', cocaColaTyping); // отладка
+    if (cocaColaTyping) return;
+    cocaColaDialogIndex++;
+    console.log('cocaColaDialogIndex:', cocaColaDialogIndex, 'cocaColaDialogLines.length:', cocaColaDialogLines.length); // отладка
+    if (cocaColaDialogIndex < cocaColaDialogLines.length) {
+        showCocaColaDialogLine();
+    } else {
+        // Диалог окончен, ждем нажатия S
+        console.log('CocaCola dialog finished, waiting for S key...'); // отладка
+    }
+} 
+
+
+
+function cocaColaKeyDown(e) {
+    if (e.code === 'ArrowLeft' || e.code === 'ArrowRight') {
+        cocaColaKeys[e.code] = true;
+    } else if (e.code === 'Space') {
+        if (!cocaColaRasulPos.isJumping) {
+            cocaColaRasulPos.velocityY = 7;
+            cocaColaRasulPos.isJumping = true;
+        }
+    } else if (e.code === 'KeyS') {
+        if (cocaColaDialogIndex >= cocaColaDialogLines.length) {
+            // Диалог окончен и нажата S - переходим к следующей сцене
+            console.log('S key pressed, moving to end screen...'); // отладка
+            window.removeEventListener('keydown', cocaColaKeyDown);
+            window.removeEventListener('keyup', cocaColaKeyUp);
+            showEndScreen();
+        } else if (!cocaColaAttackActive) {
+            // Показать атаку
+            cocaColaAttackActive = true;
+            document.querySelector('.alikhan-rasul-character').style.display = 'none';
+            document.querySelector('.alikhan-rasul-attack').style.display = 'block';
+            
+            // Убрать Кока-Колу
+            const cocaColaChar = document.getElementById('cocaColaChar');
+            const cocaColaDialog = document.getElementById('cocaColaDialog');
+            cocaColaChar.classList.add('alikhan-exit-right');
+            cocaColaDialog.style.display = 'none';
+            
+            setTimeout(() => {
+                // Вернуть обычный спрайт Расула
+                document.querySelector('.alikhan-rasul-character').style.display = 'block';
+                document.querySelector('.alikhan-rasul-attack').style.display = 'none';
+                cocaColaChar.style.display = 'none';
+                cocaColaAttackActive = false;
+                
+                // Перейти к сцене с грустным Расулом
+                startSadRasulScene();
+            }, 1200);
+        }
+    }
+}
+
+function cocaColaKeyUp(e) {
+    if (e.code === 'ArrowLeft' || e.code === 'ArrowRight') {
+        cocaColaKeys[e.code] = false;
+    }
+}
+
+function animateCocaColaRasul() {
+    if (document.getElementById('sceneCocaColaScreen').classList.contains('active')) {
+        updateCocaColaRasulPosition();
+        requestAnimationFrame(animateCocaColaRasul);
+    }
+}
+
+function updateCocaColaRasulPosition() {
+    // Горизонтальное движение
+    if (cocaColaKeys['ArrowLeft'] && cocaColaRasulPos.x > 0) {
+        cocaColaRasulPos.x -= 0.7;
+    }
+    if (cocaColaKeys['ArrowRight'] && cocaColaRasulPos.x < 60) {
+        cocaColaRasulPos.x += 0.7;
+    }
+    // Прыжок
+    if (cocaColaRasulPos.isJumping) {
+        cocaColaRasulPos.y += cocaColaRasulPos.velocityY;
+        cocaColaRasulPos.velocityY -= 0.7;
+        if (cocaColaRasulPos.y <= 2) {
+            cocaColaRasulPos.y = 2;
+            cocaColaRasulPos.velocityY = 0;
+            cocaColaRasulPos.isJumping = false;
+        }
+    }
+    // Применить позицию к обоим спрайтам
+    const rasul = document.querySelector('.alikhan-rasul-character');
+    const rasulAttack = document.querySelector('.alikhan-rasul-attack');
+    if (rasul) {
+        rasul.style.left = cocaColaRasulPos.x + '%';
+        rasul.style.bottom = cocaColaRasulPos.y + '%';
+    }
+    if (rasulAttack) {
+        rasulAttack.style.left = cocaColaRasulPos.x + '%';
+        rasulAttack.style.bottom = cocaColaRasulPos.y + '%';
+    }
+} 
+
+// === End Screen ===
+const endDialogLines = [
+    'Спасибо за игру!',
+    'Надеюсь, ты узнал много нового о стартапах и программировании.',
+    'Желаю тебе успехов в твоем пути!',
+    ')))...'
+];
+let endDialogIndex = 0;
+let endTyping = false;
+
+function showEndScreen() {
+    console.log('Showing end screen...'); // отладка
+    showScreen('end');
+    endDialogIndex = 0;
+    showEndDialogLine();
+    document.getElementById('endScreen').onclick = nextEndDialog;
+}
+
+function showEndDialogLine() {
+    console.log('Showing end dialog line:', endDialogIndex); // отладка
+    const dialogBox = document.getElementById('endDialog');
+    dialogBox.textContent = '';
+    endTyping = true;
+    typeDialogText(dialogBox, endDialogLines[endDialogIndex], 35, () => {
+        endTyping = false;
+        console.log('End dialog line finished typing'); // отладка
+    });
+}
+
+function nextEndDialog() {
+    console.log('nextEndDialog called, endTyping:', endTyping); // отладка
+    if (endTyping) return;
+    endDialogIndex++;
+    console.log('endDialogIndex:', endDialogIndex, 'endDialogLines.length:', endDialogLines.length); // отладка
+    if (endDialogIndex < endDialogLines.length) {
+        showEndDialogLine();
+    } else {
+        // Диалог окончен, перезапуск игры
+        console.log('End dialog finished, restarting game...'); // отладка
+        currentScreen = 'start';
+        showScreen('start');
+    }
+} 
+
+// === Final Story Slide ===
+const finalStoryText = `В итоге Расул понял, что его путь в IT только начинается...
+
+Сбежав с Demo Day, он осознал главное — дело не в идеальном коде или безупречной презентации.
+
+Настоящий разработчик — это тот, кто не сдается перед трудностями, учится на ошибках и всегда готов начать заново.
+
+А еще... он понял, что в N Factorial у него есть друзья, которые всегда поддержат, даже если проект не идеален.
+
+THE END`;
+
+function showFinalStorySlide() {
+    console.log('showFinalStorySlide called'); // отладка
+    showScreen('finalStoryScreen');
+    const textElement = document.getElementById('finalStoryText');
+    console.log('textElement found:', textElement); // отладка
+    textElement.textContent = '';
+    typeDialogText(textElement, finalStoryText, 50, () => {
+        // После завершения печати текста показываем подсказку
+        const hintElement = document.createElement('div');
+        hintElement.className = 'continue-hint';
+        hintElement.textContent = 'Нажмите любую клавишу, чтобы начать заново...';
+        textElement.appendChild(document.createElement('br'));
+        textElement.appendChild(document.createElement('br'));
+        textElement.appendChild(hintElement);
+        
+        // Добавляем обработчик для перезапуска игры
+        const restartHandler = () => {
+            window.removeEventListener('keydown', restartHandler);
+            window.removeEventListener('click', restartHandler);
+            currentScreen = 'start';
+            showScreen('start');
+        };
+        window.addEventListener('keydown', restartHandler);
+        window.addEventListener('click', restartHandler);
+    });
+}
+
