@@ -128,11 +128,19 @@ function createFallingItems(clickEvent) {
 }
 
 function showScreen(screenName) {
+    console.log('Showing screen:', screenName); // отладка
     document.querySelectorAll('.screen').forEach(screen => {
         screen.classList.remove('active');
     });
     
-    document.getElementById(screenName + 'Screen').classList.add('active');
+    // Специальная обработка для coinCollectionScreen
+    if (screenName === 'coinCollectionScreen') {
+        document.getElementById('coinCollectionScreen').classList.add('active');
+    } else if (screenName === 'sceneAlikhan') {
+        document.getElementById('sceneAlikhanScreen').classList.add('active');
+    } else {
+        document.getElementById(screenName + 'Screen').classList.add('active');
+    }
     currentScreen = screenName;
 }
 
@@ -680,22 +688,27 @@ function startBernarScene() {
 }
 
 function showBernarDialogLine() {
+    console.log('Showing bernar dialog line:', bernarDialogIndex); // отладка
     const dialogBox = document.getElementById('bernarDialog');
     dialogBox.textContent = '';
     bernarTyping = true;
     typeDialogText(dialogBox, bernarDialogLines[bernarDialogIndex], 35, () => {
         bernarTyping = false;
+        console.log('Dialog line finished typing'); // отладка
     });
 }
 
 function nextBernarDialog() {
+    console.log('nextBernarDialog called, bernarTyping:', bernarTyping); // отладка
     if (bernarTyping) return;
     bernarDialogIndex++;
+    console.log('bernarDialogIndex:', bernarDialogIndex, 'bernarDialogLines.length:', bernarDialogLines.length); // отладка
     if (bernarDialogIndex < bernarDialogLines.length) {
         showBernarDialogLine();
     } else {
-        // Здесь можно вызвать следующую сцену или платформер
-        startPlatformerScene();
+        // Переходим к игре с монетками
+        console.log('Dialog finished, starting coin collection...'); // отладка
+        startCoinCollectionScene();
     }
 } 
 
@@ -707,6 +720,9 @@ function bernarKeyDown(e) {
             bernarRasulPos.velocityY = 7;
             bernarRasulPos.isJumping = true;
         }
+    } else if (e.code === 'Enter' || e.code === 'KeyE') {
+        // Завершить диалог нажатием Enter или E
+        nextBernarDialog();
     } else if (e.code === 'KeyS') {
         if (isNearBernar() && !bernarAttackActive) {
             bernarAttackActive = true;
@@ -726,7 +742,7 @@ function bernarKeyDown(e) {
                 document.querySelector('.bernar-rasul-attack').style.display = 'none';
                 bernarChar.style.display = 'none';
                 // Переход к следующей сцене
-                startPlatformerScene();
+                startCoinCollectionScene();
             }, 1200);
         }
     }
@@ -777,5 +793,282 @@ function updateBernarRasulPosition() {
     if (rasulAttack) {
         rasulAttack.style.left = bernarRasulPos.x + '%';
         rasulAttack.style.bottom = bernarRasulPos.y + '%';
+    }
+} 
+
+// === Coin Collection Game ===
+let coinGameState = {
+    timeLeft: 10,
+    score: 0,
+    gameActive: false,
+    coins: [],
+    rasulPosition: { x: 50 }
+};
+
+let coinKeys = {};
+let coinGameInterval;
+let coinSpawnInterval;
+
+function startCoinCollectionScene() {
+    console.log('Starting coin collection scene...'); // отладка
+    showScreen('coinCollectionScreen');
+    
+    // Сброс состояния игры
+    coinGameState = {
+        timeLeft: 10,
+        score: 0,
+        gameActive: true,
+        coins: [],
+        rasulPosition: { x: 50 }
+    };
+    
+    coinKeys = {};
+    
+    // Обновить UI
+    updateCoinUI();
+    
+    // Установить управление
+    document.addEventListener('keydown', coinKeyDown);
+    document.addEventListener('keyup', coinKeyUp);
+    
+    // Запустить таймер
+    coinGameInterval = setInterval(() => {
+        coinGameState.timeLeft--;
+        updateCoinUI();
+        
+        if (coinGameState.timeLeft <= 0) {
+            endCoinGame();
+        }
+    }, 1000);
+    
+    // Запустить спавн монет
+    coinSpawnInterval = setInterval(() => {
+        if (coinGameState.gameActive) {
+            console.log('Spawning coin...'); // для отладки
+            spawnCoin();
+        }
+    }, 800); // монета каждые 0.8 секунд
+    
+    console.log('Coin game started, intervals set up'); // для отладки
+    
+    // Запустить игровой цикл
+    coinGameLoop();
+}
+
+function spawnCoin() {
+    const coin = {
+        id: Date.now() + Math.random(),
+        x: Math.random() * 90 + 5, // от 5% до 95%
+        y: -10,
+        speed: 0.8 + Math.random() * 1.0 // скорость от 0.8 до 1.8
+    };
+    
+    coinGameState.coins.push(coin);
+    
+    // Создать DOM элемент
+    const coinElement = document.createElement('div');
+    coinElement.className = 'coin';
+    coinElement.id = `coin-${coin.id}`;
+    coinElement.innerHTML = '₿';
+    coinElement.style.left = coin.x + '%';
+    coinElement.style.top = coin.y + '%';
+    coinElement.style.position = 'absolute';
+    coinElement.style.zIndex = '5';
+    
+    document.querySelector('.coin-scene-container').appendChild(coinElement);
+    
+    console.log('Coin spawned:', coin); // для отладки
+}
+
+function coinGameLoop() {
+    if (!coinGameState.gameActive) return;
+    
+    // Обновить позицию Расула
+    updateCoinRasulPosition();
+    
+    // Обновить монеты и проверить коллизии
+    for (let i = coinGameState.coins.length - 1; i >= 0; i--) {
+        const coin = coinGameState.coins[i];
+        coin.y += coin.speed;
+        
+        // Обновить позицию DOM элемента
+        const coinElement = document.getElementById(`coin-${coin.id}`);
+        if (coinElement) {
+            coinElement.style.top = coin.y + '%';
+        }
+        
+        // Проверить коллизию с Расулом
+        if (checkCoinCollision(coin)) {
+            collectCoin(coin, i);
+            continue; // пропустить остальные проверки для этой монеты
+        }
+        
+        // Удалить монеты, которые упали слишком низко
+        if (coin.y > 110) {
+            removeCoin(coin.id);
+            coinGameState.coins.splice(i, 1);
+        }
+    }
+    
+    requestAnimationFrame(coinGameLoop);
+}
+
+function updateCoinRasulPosition() {
+    // Горизонтальное движение
+    if (coinKeys['ArrowLeft'] && coinGameState.rasulPosition.x > 0) {
+        coinGameState.rasulPosition.x -= 2;
+    }
+    if (coinKeys['ArrowRight'] && coinGameState.rasulPosition.x < 90) {
+        coinGameState.rasulPosition.x += 2;
+    }
+    
+    // Применить позицию
+    const rasul = document.getElementById('coinRasul');
+    if (rasul) {
+        rasul.style.left = coinGameState.rasulPosition.x + '%';
+    }
+}
+
+function checkCoinCollision(coin) {
+    const rasulX = coinGameState.rasulPosition.x;
+    const rasulWidth = 15; // примерная ширина персонажа в %
+    const coinWidth = 5; // примерная ширина монеты в %
+    
+    // Проверить пересечение по X
+    const coinLeft = coin.x;
+    const coinRight = coin.x + coinWidth;
+    const rasulLeft = rasulX;
+    const rasulRight = rasulX + rasulWidth;
+    
+    const xOverlap = coinRight > rasulLeft && coinLeft < rasulRight;
+    
+    // Проверить пересечение по Y (монета должна быть на уровне персонажа)
+    const yOverlap = coin.y > 70 && coin.y < 95;
+    
+    return xOverlap && yOverlap;
+}
+
+function collectCoin(coin, index) {
+    coinGameState.score++;
+    
+    // Показать "+1 commit to github"
+    showCommitPopup(coin.x);
+    
+    // Удалить монету
+    removeCoin(coin.id);
+    coinGameState.coins.splice(index, 1);
+    
+    // Обновить UI
+    updateCoinUI();
+}
+
+function showCommitPopup(x) {
+    const popup = document.createElement('div');
+    popup.className = 'commit-popup';
+    popup.innerHTML = '+1 commit to github';
+    popup.style.left = x + '%';
+    popup.style.top = '60%';
+    
+    document.querySelector('.coin-scene-container').appendChild(popup);
+    
+    // Удалить через 1 секунду
+    setTimeout(() => {
+        if (popup.parentNode) {
+            popup.parentNode.removeChild(popup);
+        }
+    }, 1000);
+}
+
+function removeCoin(coinId) {
+    const coinElement = document.getElementById(`coin-${coinId}`);
+    if (coinElement && coinElement.parentNode) {
+        coinElement.parentNode.removeChild(coinElement);
+    }
+}
+
+function updateCoinUI() {
+    document.getElementById('coinTimer').textContent = `Time: ${coinGameState.timeLeft}`;
+    document.getElementById('coinScore').textContent = `Commits: ${coinGameState.score}`;
+}
+
+function endCoinGame() {
+    coinGameState.gameActive = false;
+    
+    // Остановить интервалы
+    clearInterval(coinGameInterval);
+    clearInterval(coinSpawnInterval);
+    
+    // Удалить обработчики событий
+    document.removeEventListener('keydown', coinKeyDown);
+    document.removeEventListener('keyup', coinKeyUp);
+    
+    // Очистить монеты
+    coinGameState.coins.forEach(coin => removeCoin(coin.id));
+    coinGameState.coins = [];
+    
+    // Показать результат
+    setTimeout(() => {
+        if (coinGameState.score >= 10) {
+            alert(`🎉 Поздравляю! Вы собрали ${coinGameState.score} коммитов! Переходим к следующей сцене...`);
+            startAlikhanScene(); // переходим к диалогу с Алиханом
+        } else {
+            alert(`😔 Вы собрали только ${coinGameState.score} коммитов. Нужно было 10+. Попробуйте снова!`);
+            startCoinCollectionScene(); // перезапуск
+        }
+    }, 500);
+}
+
+function coinKeyDown(e) {
+    if (e.code === 'ArrowLeft' || e.code === 'ArrowRight') {
+        coinKeys[e.code] = true;
+    }
+}
+
+function coinKeyUp(e) {
+    if (e.code === 'ArrowLeft' || e.code === 'ArrowRight') {
+        coinKeys[e.code] = false;
+    }
+}
+
+// === Alikhan Scene ===
+const alikhanDialogLines = [
+    'Эй, Расул! Я видел твои коммиты в GitHub! Отличная работа!',
+    'Ты действительно собрал много коммитов за короткое время.',
+    'Такая активность показывает, что ты серьезно относишься к проекту.',
+    'Продолжай в том же духе! Успехов в разработке!'
+];
+let alikhanDialogIndex = 0;
+let alikhanTyping = false;
+
+function startAlikhanScene() {
+    console.log('Starting Alikhan scene...'); // отладка
+    showScreen('sceneAlikhan');
+    alikhanDialogIndex = 0;
+    showAlikhanDialogLine();
+    document.getElementById('sceneAlikhanScreen').onclick = nextAlikhanDialog;
+}
+
+function showAlikhanDialogLine() {
+    console.log('Showing alikhan dialog line:', alikhanDialogIndex); // отладка
+    const dialogBox = document.getElementById('alikhanDialog');
+    dialogBox.textContent = '';
+    alikhanTyping = true;
+    typeDialogText(dialogBox, alikhanDialogLines[alikhanDialogIndex], 35, () => {
+        alikhanTyping = false;
+        console.log('Alikhan dialog line finished typing'); // отладка
+    });
+}
+
+function nextAlikhanDialog() {
+    console.log('nextAlikhanDialog called, alikhanTyping:', alikhanTyping); // отладка
+    if (alikhanTyping) return;
+    alikhanDialogIndex++;
+    console.log('alikhanDialogIndex:', alikhanDialogIndex, 'alikhanDialogLines.length:', alikhanDialogLines.length); // отладка
+    if (alikhanDialogIndex < alikhanDialogLines.length) {
+        showAlikhanDialogLine();
+    } else {
+        // Диалог окончен, показываем финальный экран
+        console.log('Alikhan dialog finished, showing end screen...'); // отладка
+        showEndScreen();
     }
 } 
