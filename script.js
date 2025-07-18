@@ -1332,10 +1332,10 @@ function almasKeyDown(e) {
                 almasChar.style.display = 'none';
                 almasAttackActive = false;
                 
-                console.log('About to call startFinalSlides...'); // отладка
-                // Переход к финальным слайдам
-                startFinalSlides();
-                console.log('startFinalSlides called successfully'); // отладка
+                console.log('About to call startFinalSlide...'); // отладка
+                // Переход к финальному слайду
+                startFinalSlide();
+                console.log('startFinalSlide called successfully'); // отладка
             }, 1200);
         }
     }
@@ -1585,17 +1585,17 @@ function nextEndDialog() {
 
 // === Final Story Slides ===
 const finalStoryTexts = [
-    'В итоге Расул понял, что его путь в IT только начинается...\n\nСбежав с Demo Day, он осознал главное — дело не в идеальном коде или безупречной презентации.',
+    'В итоге Расул понял, что его путь в IT только начинается...\n\nСбежав с Demo Day, он осознал главное — дело не в идеальном коде или безупречной презентации.\n\nИногда важнее просто начать действовать.',
     
-    'Настоящий разработчик — это тот, кто не сдается перед трудностями, учится на ошибках и всегда готов начать заново.\n\nЗа время своего приключения Расул обрел уверенность в себе.',
+    'Настоящий разработчик — это тот, кто не сдается перед трудностями, учится на ошибках и всегда готов начать заново.\n\nЗа время своего приключения Расул обрел уверенность в себе и понял ценность упорства.',
     
-    'А еще... он понял, что в N Factorial у него есть друзья, которые всегда поддержат, даже если проект не идеален.\n\nТЕПЕРЬ ОН ГОТОВ К НОВЫМ ВЫЗОВАМ!\n\nTHE END'
+    'А еще... он понял, что в N Factorial у него есть друзья, которые всегда поддержат, даже если проект не идеален.\n\nНастоящая сила — в команде единомышленников.\n\nТЕПЕРЬ РАСУЛ ГОТОВ К НОВЫМ ВЫЗОВАМ!\n\nTHE END'
 ];
 
 let finalSlideIndex = 0;
 let finalTyping = false;
 
-function startFinalSlides() {
+function startFinalSlide() {
     console.log('Starting final slides...'); // отладка
     showScreen('finalStoryScreen');
     finalSlideIndex = 0;
@@ -1617,7 +1617,7 @@ function showFinalSlide() {
     // Начать печатный эффект
     const textElement = document.getElementById(`finalText${finalSlideIndex + 1}`);
     finalTyping = true;
-    typeDialogText(textElement, finalStoryTexts[finalSlideIndex], 35, () => {
+    typeDialogText(textElement, finalStoryTexts[finalSlideIndex], 40, () => {
         finalTyping = false;
         console.log('Final slide finished typing'); // отладка
     });
@@ -1629,15 +1629,11 @@ function nextFinalSlide() {
     if (finalSlideIndex < finalStoryTexts.length) {
         showFinalSlide();
     } else {
-        // Последний слайд, перезапуск игры
-        document.getElementById('finalStoryScreen').onclick = restartGame;
+        // Достигли последнего слайда, убираем обработчик клика - статичный конец
+        document.getElementById('finalStoryScreen').onclick = null;
+        console.log('Reached final slide, staying here forever...'); // отладка
     }
 }
 
-function restartGame() {
-    console.log('Restarting game...'); // отладка
-    document.getElementById('finalStoryScreen').onclick = null;
-    currentScreen = 'start';
-    showScreen('start');
-}
+
 
