@@ -710,4 +710,15 @@ body {
     z-index: 20;
     box-shadow: 0 0 16px #00ffcc44;
     letter-spacing: 1.5px;
+}
+
+.alikhan-dialog.alikhan-speaking {
+    border: 3px solid #00ffcc;
+    box-shadow: 0 0 16px #00ffcc44;
+}
+
+.alikhan-dialog.rasul-speaking {
+    border: 3px solid #ff6b6b;
+    box-shadow: 0 0 16px #ff6b6b44;
+    background: rgba(0,0,0,0.9);
 } 

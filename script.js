@@ -1033,9 +1033,13 @@ function coinKeyUp(e) {
 // === Alikhan Scene ===
 const alikhanDialogLines = [
     'Эй, Расул! Я видел твои коммиты в GitHub! Отличная работа!',
+    'Да, но это все фиксы багов... Ничего серьезного я не сделал.',
     'Ты действительно собрал много коммитов за короткое время.',
+    'Это потому что у меня код был полон ошибок...',
     'Такая активность показывает, что ты серьезно относишься к проекту.',
-    'Продолжай в том же духе! Успехов в разработке!'
+    'Серьезно? Я просто пытаюсь не сломать то, что уже работает.',
+    'Продолжай в том же духе! Успехов в разработке!',
+    'Спасибо, но я все еще не уверен, что мой код хоть кому-то нужен...'
 ];
 let alikhanDialogIndex = 0;
 let alikhanTyping = false;
@@ -1053,6 +1057,13 @@ function showAlikhanDialogLine() {
     const dialogBox = document.getElementById('alikhanDialog');
     dialogBox.textContent = '';
     alikhanTyping = true;
+    
+    // Определяем, кто говорит (четные индексы - Алихан, нечетные - Расул)
+    const isAlikhanSpeaking = alikhanDialogIndex % 2 === 0;
+    
+    // Устанавливаем соответствующий стиль
+    dialogBox.className = 'alikhan-dialog pixel-text ' + (isAlikhanSpeaking ? 'alikhan-speaking' : 'rasul-speaking');
+    
     typeDialogText(dialogBox, alikhanDialogLines[alikhanDialogIndex], 35, () => {
         alikhanTyping = false;
         console.log('Alikhan dialog line finished typing'); // отладка
