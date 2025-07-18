@@ -1199,14 +1199,7 @@ function updateAlikhanRasulPosition() {
     }
 }
 
-// === Final Story ===
-const finalStoryTexts = [
-    'Вот он наконец сбежал с DemoDay...',
-    'Расул чувствовал облегчение, но и сомнения.',
-    'Может, он действительно мог бы сделать больше?'
-];
-let finalStoryIndex = 0;
-let finalStoryTyping = false;
+
 
 
 
@@ -1313,8 +1306,15 @@ function almasKeyDown(e) {
         }
     } else if (e.code === 'KeyS') {
         if (!almasAttackActive) {
+            console.log('S key pressed, starting attack...'); // отладка
             // Показать атаку
             almasAttackActive = true;
+            
+            // Немедленно удаляем все обработчики, чтобы избежать повторных вызовов
+            document.getElementById('sceneAlmasScreen').onclick = null;
+            window.removeEventListener('keydown', almasKeyDown);
+            window.removeEventListener('keyup', almasKeyUp);
+            
             document.querySelector('.almas-rasul-character').style.display = 'none';
             document.querySelector('.almas-rasul-attack').style.display = 'block';
             
@@ -1325,19 +1325,17 @@ function almasKeyDown(e) {
             if (almasDialog) almasDialog.style.display = 'none';
             
             setTimeout(() => {
+                console.log('Attack animation finished, showing final slide...'); // отладка
                 // Вернуть обычный спрайт Расула
                 document.querySelector('.almas-rasul-character').style.display = 'block';
                 document.querySelector('.almas-rasul-attack').style.display = 'none';
                 almasChar.style.display = 'none';
                 almasAttackActive = false;
                 
-                // Удаляем обработчики
-                document.getElementById('sceneAlmasScreen').onclick = null;
-                window.removeEventListener('keydown', almasKeyDown);
-                window.removeEventListener('keyup', almasKeyUp);
-                
-                // Показать финальный слайд
-                showFinalStorySlide();
+                console.log('About to call startFinalSlides...'); // отладка
+                // Переход к финальным слайдам
+                startFinalSlides();
+                console.log('startFinalSlides called successfully'); // отладка
             }, 1200);
         }
     }
@@ -1585,41 +1583,61 @@ function nextEndDialog() {
     }
 } 
 
-// === Final Story Slide ===
-const finalStoryText = `В итоге Расул понял, что его путь в IT только начинается...
+// === Final Story Slides ===
+const finalStoryTexts = [
+    'В итоге Расул понял, что его путь в IT только начинается...\n\nСбежав с Demo Day, он осознал главное — дело не в идеальном коде или безупречной презентации.',
+    
+    'Настоящий разработчик — это тот, кто не сдается перед трудностями, учится на ошибках и всегда готов начать заново.\n\nЗа время своего приключения Расул обрел уверенность в себе.',
+    
+    'А еще... он понял, что в N Factorial у него есть друзья, которые всегда поддержат, даже если проект не идеален.\n\nТЕПЕРЬ ОН ГОТОВ К НОВЫМ ВЫЗОВАМ!\n\nTHE END'
+];
 
-Сбежав с Demo Day, он осознал главное — дело не в идеальном коде или безупречной презентации.
+let finalSlideIndex = 0;
+let finalTyping = false;
 
-Настоящий разработчик — это тот, кто не сдается перед трудностями, учится на ошибках и всегда готов начать заново.
-
-А еще... он понял, что в N Factorial у него есть друзья, которые всегда поддержат, даже если проект не идеален.
-
-THE END`;
-
-function showFinalStorySlide() {
-    console.log('showFinalStorySlide called'); // отладка
+function startFinalSlides() {
+    console.log('Starting final slides...'); // отладка
     showScreen('finalStoryScreen');
-    const textElement = document.getElementById('finalStoryText');
-    console.log('textElement found:', textElement); // отладка
-    textElement.textContent = '';
-    typeDialogText(textElement, finalStoryText, 50, () => {
-        // После завершения печати текста показываем подсказку
-        const hintElement = document.createElement('div');
-        hintElement.className = 'continue-hint';
-        hintElement.textContent = 'Нажмите любую клавишу, чтобы начать заново...';
-        textElement.appendChild(document.createElement('br'));
-        textElement.appendChild(document.createElement('br'));
-        textElement.appendChild(hintElement);
-        
-        // Добавляем обработчик для перезапуска игры
-        const restartHandler = () => {
-            window.removeEventListener('keydown', restartHandler);
-            window.removeEventListener('click', restartHandler);
-            currentScreen = 'start';
-            showScreen('start');
-        };
-        window.addEventListener('keydown', restartHandler);
-        window.addEventListener('click', restartHandler);
+    finalSlideIndex = 0;
+    showFinalSlide();
+    document.getElementById('finalStoryScreen').onclick = nextFinalSlide;
+}
+
+function showFinalSlide() {
+    console.log('Showing final slide:', finalSlideIndex); // отладка
+    // Скрыть все слайды
+    document.querySelectorAll('#finalStoryScreen .story-slide').forEach(slide => {
+        slide.classList.remove('active');
     });
+    
+    // Показать текущий слайд
+    const slide = document.getElementById(`finalSlide${finalSlideIndex + 1}`);
+    slide.classList.add('active');
+    
+    // Начать печатный эффект
+    const textElement = document.getElementById(`finalText${finalSlideIndex + 1}`);
+    finalTyping = true;
+    typeDialogText(textElement, finalStoryTexts[finalSlideIndex], 35, () => {
+        finalTyping = false;
+        console.log('Final slide finished typing'); // отладка
+    });
+}
+
+function nextFinalSlide() {
+    if (finalTyping) return;
+    finalSlideIndex++;
+    if (finalSlideIndex < finalStoryTexts.length) {
+        showFinalSlide();
+    } else {
+        // Последний слайд, перезапуск игры
+        document.getElementById('finalStoryScreen').onclick = restartGame;
+    }
+}
+
+function restartGame() {
+    console.log('Restarting game...'); // отладка
+    document.getElementById('finalStoryScreen').onclick = null;
+    currentScreen = 'start';
+    showScreen('start');
 }
 
