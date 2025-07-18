@@ -138,6 +138,8 @@ function showScreen(screenName) {
         document.getElementById('coinCollectionScreen').classList.add('active');
     } else if (screenName === 'sceneAlikhan') {
         document.getElementById('sceneAlikhanScreen').classList.add('active');
+    } else if (screenName === 'sceneCocaCola') {
+        document.getElementById('sceneCocaColaScreen').classList.add('active');
     } else {
         document.getElementById(screenName + 'Screen').classList.add('active');
     }
@@ -1051,6 +1053,9 @@ function startAlikhanScene() {
     alikhanDialogIndex = 0;
     showAlikhanDialogLine();
     document.getElementById('sceneAlikhanScreen').onclick = nextAlikhanDialog;
+    
+    // Добавляем обработчик клавиши S
+    window.addEventListener('keydown', alikhanKeyDown);
 }
 
 function showAlikhanDialogLine() {
@@ -1079,8 +1084,45 @@ function nextAlikhanDialog() {
     if (alikhanDialogIndex < alikhanDialogLines.length) {
         showAlikhanDialogLine();
     } else {
-        // Диалог окончен, показываем финальный экран
-        console.log('Alikhan dialog finished, showing end screen...'); // отладка
+        // Диалог окончен, ждем нажатия S
+        console.log('Alikhan dialog finished, waiting for S key...'); // отладка
+        showAlikhanFinalHint();
+    }
+} 
+
+function showAlikhanFinalHint() {
+    // Показываем подсказку о нажатии S
+    const hintElement = document.createElement('div');
+    hintElement.className = 'controls-hint pixel-text';
+    hintElement.style.position = 'absolute';
+    hintElement.style.top = '20px';
+    hintElement.style.left = '50%';
+    hintElement.style.transform = 'translateX(-50%)';
+    hintElement.style.zIndex = '30';
+    hintElement.style.color = '#ffff00';
+    hintElement.style.fontSize = '18px';
+    hintElement.textContent = 'Press S to continue...';
+    
+    document.querySelector('.alikhan-scene-container').appendChild(hintElement);
+}
+
+function alikhanKeyDown(e) {
+    if (e.code === 'KeyS' && alikhanDialogIndex >= alikhanDialogLines.length) {
+        // Диалог окончен и нажата S - переходим к следующей сцене
+        console.log('S key pressed, moving to CocaCola scene...'); // отладка
+        window.removeEventListener('keydown', alikhanKeyDown);
+        startCocaColaScene();
+    }
+}
+
+function startCocaColaScene() {
+    showScreen('sceneCocaCola');
+    // По клику или через 2 секунды показать финальный экран
+    const cocaColaScreen = document.getElementById('sceneCocaColaScreen');
+    function finishCocaCola() {
+        cocaColaScreen.onclick = null;
         showEndScreen();
     }
+    cocaColaScreen.onclick = finishCocaCola;
+    setTimeout(finishCocaCola, 2500);
 } 
